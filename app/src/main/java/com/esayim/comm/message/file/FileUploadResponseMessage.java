@@ -15,15 +15,21 @@ public class FileUploadResponseMessage extends Message {
      */
     private String fileUrl;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.FileUploadResponseMessage;
-    }
-
     public FileUploadResponseMessage() {
     }
 
     public FileUploadResponseMessage(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public FileUploadResponseMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public FileUploadResponseMessage(String messageId, Boolean status, String fileUrl) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.fileUrl = fileUrl;
     }
 
@@ -34,4 +40,10 @@ public class FileUploadResponseMessage extends Message {
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.FileUploadResponseMessage;
+    }
+
 }

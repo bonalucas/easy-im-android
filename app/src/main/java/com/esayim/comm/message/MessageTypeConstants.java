@@ -7,7 +7,6 @@ package com.esayim.comm.message;
  */
 public interface MessageTypeConstants {
 
-    Byte GlobalErrorResponseMessage = 0;
     Byte LoginRequestMessage = 1;
     Byte LoginResponseMessage = 2;
     Byte AddFriendRequestMessage = 3;
@@ -24,11 +23,8 @@ public interface MessageTypeConstants {
     Byte RegisterRequestMessage = 14;
     Byte RegisterResponseMessage = 15;
     Byte ReconnectRequestMessage = 16;
-    // 心跳检测
     Byte HeartBeatRequestMessage = 17;
     Byte HeartBeatResponseMessage = 18;
-
-
     Byte TestRequestMessage = 19;
     Byte TestResponseMessage = 20;
 

@@ -19,8 +19,21 @@ import io.netty.handler.timeout.IdleStateHandler;
  */
 public class ClientIdleStateHandler extends IdleStateHandler {
 
+    private static final String TAG = ClientIdleStateHandler.class.getSimpleName();
+
+    /**
+     * 客户端
+     */
     private final NettyClient nettyClient;
+
+    /**
+     * 心跳检测时长
+     */
     private final int heartbeatInterval;
+
+    /**
+     * 心跳任务
+     */
     private HeartbeatTask heartbeatTask;
 
     public ClientIdleStateHandler(NettyClient nettyClient, int heartbeatInterval) {
@@ -34,14 +47,14 @@ public class ClientIdleStateHandler extends IdleStateHandler {
         IdleState state = evt.state();
         switch (state) {
             case READER_IDLE: {
-                Log.i("ClientIdleStateHandler", (heartbeatInterval * 3) + " ms内未读到数据，自动触发客户端重连");
+                Log.i(TAG, (heartbeatInterval * 3) + " ms内未读到数据，自动触发客户端重连");
                 // 触发重连
                 nettyClient.reconnect(false);
                 break;
             }
 
             case WRITER_IDLE: {
-                Log.i("ClientIdleStateHandler", (heartbeatInterval) + " ms客户端未发送数据，自动触发发送心态包");
+                Log.i(TAG, (heartbeatInterval) + " ms客户端未发送数据，自动触发发送心跳包");
                 if (heartbeatTask == null) {
                     heartbeatTask = new HeartbeatTask(ctx);
                 }

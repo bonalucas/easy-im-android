@@ -32,15 +32,24 @@ public class ChatRequestMessage extends Message {
      */
     private Date now;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.ChatRequestMessage;
-    }
-
     public ChatRequestMessage() {
     }
 
     public ChatRequestMessage(String senderId, String receiverId, String content, Date now) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.content = content;
+        this.now = now;
+    }
+
+    public ChatRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public ChatRequestMessage(String messageId, Boolean status, String senderId, String receiverId, String content, Date now) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.content = content;
@@ -78,4 +87,10 @@ public class ChatRequestMessage extends Message {
     public void setNow(Date now) {
         this.now = now;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.ChatRequestMessage;
+    }
+
 }

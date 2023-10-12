@@ -25,15 +25,23 @@ public class AddFriendResponseMessage extends Message {
      */
     private String friendAvatar;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.AddFriendResponseMessage;
-    }
-
     public AddFriendResponseMessage() {
     }
 
     public AddFriendResponseMessage(String friendId, String friendNickname, String friendAvatar) {
+        this.friendId = friendId;
+        this.friendNickname = friendNickname;
+        this.friendAvatar = friendAvatar;
+    }
+
+    public AddFriendResponseMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public AddFriendResponseMessage(String messageId, Boolean status, String friendId, String friendNickname, String friendAvatar) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.friendId = friendId;
         this.friendNickname = friendNickname;
         this.friendAvatar = friendAvatar;
@@ -62,4 +70,10 @@ public class AddFriendResponseMessage extends Message {
     public void setFriendAvatar(String friendAvatar) {
         this.friendAvatar = friendAvatar;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.AddFriendResponseMessage;
+    }
+
 }

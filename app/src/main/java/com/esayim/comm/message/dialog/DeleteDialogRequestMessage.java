@@ -20,15 +20,22 @@ public class DeleteDialogRequestMessage extends Message {
      */
     private String senderId;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.DeleteDialogRequestMessage;
-    }
-
     public DeleteDialogRequestMessage() {
     }
 
     public DeleteDialogRequestMessage(String dialogId, String senderId) {
+        this.dialogId = dialogId;
+        this.senderId = senderId;
+    }
+
+    public DeleteDialogRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public DeleteDialogRequestMessage(String messageId, Boolean status, String dialogId, String senderId) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.dialogId = dialogId;
         this.senderId = senderId;
     }
@@ -48,4 +55,10 @@ public class DeleteDialogRequestMessage extends Message {
     public void setSenderId(String senderId) {
         this.senderId = senderId;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.DeleteDialogRequestMessage;
+    }
+
 }

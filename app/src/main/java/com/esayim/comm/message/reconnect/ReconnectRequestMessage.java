@@ -15,15 +15,21 @@ public class ReconnectRequestMessage extends Message {
      */
     private String userId;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.ReconnectRequestMessage;
-    }
-
     public ReconnectRequestMessage() {
     }
 
     public ReconnectRequestMessage(String userId) {
+        this.userId = userId;
+    }
+
+    public ReconnectRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public ReconnectRequestMessage(String messageId, Boolean status, String userId) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.userId = userId;
     }
 
@@ -34,4 +40,10 @@ public class ReconnectRequestMessage extends Message {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.ReconnectRequestMessage;
+    }
+
 }

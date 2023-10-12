@@ -20,15 +20,22 @@ public class LoginRequestMessage extends Message {
      */
     private String userPassword;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.LoginRequestMessage;
-    }
-
     public LoginRequestMessage() {
     }
 
     public LoginRequestMessage(String userId, String userPassword) {
+        this.userId = userId;
+        this.userPassword = userPassword;
+    }
+
+    public LoginRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public LoginRequestMessage(String messageId, Boolean status, String userId, String userPassword) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.userId = userId;
         this.userPassword = userPassword;
     }
@@ -48,4 +55,10 @@ public class LoginRequestMessage extends Message {
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.LoginRequestMessage;
+    }
+
 }

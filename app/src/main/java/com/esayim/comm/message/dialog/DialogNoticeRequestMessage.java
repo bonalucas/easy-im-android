@@ -25,15 +25,23 @@ public class DialogNoticeRequestMessage extends Message {
      */
     private Integer dialogType;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.DialogNoticeRequestMessage;
-    }
-
     public DialogNoticeRequestMessage() {
     }
 
     public DialogNoticeRequestMessage(String senderId, String receiverId, Integer dialogType) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.dialogType = dialogType;
+    }
+
+    public DialogNoticeRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public DialogNoticeRequestMessage(String messageId, Boolean status, String senderId, String receiverId, Integer dialogType) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.dialogType = dialogType;
@@ -62,4 +70,10 @@ public class DialogNoticeRequestMessage extends Message {
     public void setDialogType(Integer dialogType) {
         this.dialogType = dialogType;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.DialogNoticeRequestMessage;
+    }
+
 }

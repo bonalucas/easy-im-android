@@ -20,15 +20,22 @@ public class SearchFriendRequestMessage extends Message {
      */
     private String searchKey;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.SearchFriendRequestMessage;
-    }
-
     public SearchFriendRequestMessage() {
     }
 
     public SearchFriendRequestMessage(String userId, String searchKey) {
+        this.userId = userId;
+        this.searchKey = searchKey;
+    }
+
+    public SearchFriendRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public SearchFriendRequestMessage(String messageId, Boolean status, String userId, String searchKey) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.userId = userId;
         this.searchKey = searchKey;
     }
@@ -48,4 +55,10 @@ public class SearchFriendRequestMessage extends Message {
     public void setSearchKey(String searchKey) {
         this.searchKey = searchKey;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.SearchFriendRequestMessage;
+    }
+
 }

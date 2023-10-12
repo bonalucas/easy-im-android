@@ -14,6 +14,17 @@ public class TestRequestMessage extends Message {
         this.content = content;
     }
 
+    public TestRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public TestRequestMessage(String messageId, Boolean status, String content) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+        this.content = content;
+    }
+
     public String getContent() {
         return content;
     }
@@ -26,4 +37,5 @@ public class TestRequestMessage extends Message {
     public Byte getConstant() {
         return MessageTypeConstants.TestRequestMessage;
     }
+
 }

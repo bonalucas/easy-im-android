@@ -5,7 +5,7 @@ import android.util.Log;
 import com.esayim.client.common.ClientConfig;
 import com.esayim.client.common.ClientExecutorService;
 import com.esayim.client.common.MessageDispatcher;
-import com.esayim.client.common.MessageTimeoutTimerManager;
+import com.esayim.client.common.MessageRetransmissionManager;
 import com.esayim.client.handler.ClientIdleStateHandler;
 import com.esayim.client.listener.ClientConnectStatusCallback;
 import com.esayim.client.listener.ClientEventListener;
@@ -81,9 +81,9 @@ public class NettyClient {
     private MessageDispatcher messageDispatcher;
 
     /**
-     * 消息超时管理器
+     * 消息重发管理器
      */
-    private MessageTimeoutTimerManager messageTimeoutTimerManager;
+    private MessageRetransmissionManager messageRetransmissionManager;
 
     /**
      * 客户端连接状态
@@ -146,7 +146,7 @@ public class NettyClient {
     private static final ClientChannelInitializer CLIENT_CHANNEL_INITIALIZER = new ClientChannelInitializer();
 
     /**
-     * 单例模式下创建实例
+     * 双重锁检查方式创建单例
      *
      * @return 客户端实例
      */
@@ -177,7 +177,7 @@ public class NettyClient {
         messageDispatcher.setClientEventListener(clientEventListener);
         this.clientExecutorService = new ClientExecutorService();
         clientExecutorService.initReconnectPool();
-        messageTimeoutTimerManager = new MessageTimeoutTimerManager(this);
+        messageRetransmissionManager = new MessageRetransmissionManager(this);
         // 设置初始化 APP 状态
         setAppStatus(appStatus);
         // 首次连接
@@ -218,20 +218,23 @@ public class NettyClient {
      * 发送消息
      *
      * @param message 消息
-     * @param enableTimeout 开启超时器
+     * @param enabled 开启消息重发器
      */
-    public void sendMessage(Message message, boolean enableTimeout) {
+    public void sendMessage(Message message, boolean enabled) {
+        // 判断通道是否为空
         if (channel == null) {
-            Log.e(TAG, "发送消息失败：channel is null");
+            Log.e(TAG, "发送消息失败：通道为空（Channel is null）");
             return;
         }
+        // 开启消息重发器（延迟 10s 重发消息）
+        if (enabled) {
+            messageRetransmissionManager.add(message);
+        }
+        // 发送消息
         try {
             channel.writeAndFlush(message);
         } catch (Exception e) {
             Log.e(TAG, "发送消息失败：" + e.getMessage());
-            if (enableTimeout) {
-                messageTimeoutTimerManager.add(message);
-            }
         }
     }
 
@@ -418,9 +421,11 @@ public class NettyClient {
      *
      * @return 消息超时管理器
      */
-    public MessageTimeoutTimerManager getMessageTimeoutTimerManager() {
-        return this.messageTimeoutTimerManager;
+    public MessageRetransmissionManager getMessageRetransmissionManager() {
+        return this.messageRetransmissionManager;
     }
+
+    // =============================== 私有方法 ===============================
 
     /**
      * 构建bootstrap
@@ -430,8 +435,11 @@ public class NettyClient {
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(workerGroup);
         bootstrap.channel(NioSocketChannel.class);
+        // 设置连接超时5s
         bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000);
+        // 开启 TCP 心跳机制
         bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        // 开启 Nagle 算法（保证高实时性）
         bootstrap.option(ChannelOption.TCP_NODELAY, true);
         bootstrap.handler(CLIENT_CHANNEL_INITIALIZER);
         this.bootstrap = bootstrap;
@@ -529,17 +537,19 @@ public class NettyClient {
      */
     private void toServer() {
         try {
-            // 连接服务器并获取与客户端之间的通道（阻塞获取）
+            // 连接服务器并获取与客户端之间的通道（同步阻塞获取）
             channel = bootstrap.connect(new InetSocketAddress(serverIp, serverPort)).sync().channel();
             // 重新添加初始化时的心跳检测处理器（此时channel不为空）
             addHeartbeatHandler();
+            // 连接成功后重发未发送成功的消息
+            messageRetransmissionManager.onResetConnected();
         } catch (Exception e) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-            Log.i(TAG, String.format("连接Server(ip[%s], port[%s])失败", serverIp, serverPort));
+            Log.e(TAG, String.format("连接Server(ip[%s], port[%s])失败", serverIp, serverPort));
             channel = null;
         }
     }

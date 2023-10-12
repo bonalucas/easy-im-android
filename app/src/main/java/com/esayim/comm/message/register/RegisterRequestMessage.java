@@ -30,16 +30,24 @@ public class RegisterRequestMessage extends Message {
      */
     private String avatar;
 
-
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.RegisterRequestMessage;
-    }
-
     public RegisterRequestMessage() {
     }
 
     public RegisterRequestMessage(String username, String password, String nickname, String avatar) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.avatar = avatar;
+    }
+
+    public RegisterRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public RegisterRequestMessage(String messageId, Boolean status, String username, String password, String nickname, String avatar) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -77,4 +85,10 @@ public class RegisterRequestMessage extends Message {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.RegisterRequestMessage;
+    }
+
 }

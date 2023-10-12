@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.esayim.client.common.SnowflakeIDGenerator;
+import com.esayim.comm.message.heartbeat.HeartBeatRequestMessage;
 import com.esayim.event.CEventCenter;
 import com.esayim.event.Events;
 import com.esayim.event.I_CEventListener;
@@ -17,6 +19,8 @@ import com.esayim.service.MessageProcessor;
 import com.esayim.service.ServiceConnectStatusListener;
 import com.esayim.service.ServiceEventListener;
 import com.esayim.service.ServiceThreadPoolExecutor;
+
+import cn.hutool.core.util.IdUtil;
 
 
 public class MainActivity extends AppCompatActivity implements I_CEventListener {
@@ -32,13 +36,12 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
         mEditText = findViewById(R.id.et_content);
         mTextView = findViewById(R.id.tv_msg);
         NettyClient nettyClient = NettyClient.getInstance();
-        nettyClient.init(new ServiceEventListener(), new ServiceConnectStatusListener(), ClientConfig.APP_STATUS_FOREGROUND);
+        nettyClient.init(new ServiceEventListener(), new ServiceConnectStatusListener(), ClientConfig.APP_STATUS_BACKGROUND);
         CEventCenter.registerEventListener(this, Events.CHAT_TEST_MESSAGE);
     }
 
     public void sendTestMsg(View view) {
-        TestRequestMessage message = new TestRequestMessage(mEditText.getText().toString());
-        message.setMessageId("1001");
+        TestRequestMessage message = new TestRequestMessage(SnowflakeIDGenerator.generateID(), true, mEditText.getText().toString());
         MessageProcessor.getInstance().sendMessage(message);
     }
 

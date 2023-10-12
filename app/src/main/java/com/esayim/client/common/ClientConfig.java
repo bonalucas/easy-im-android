@@ -40,7 +40,7 @@ public class ClientConfig {
     /**
      * 心跳消息间隔时长（后台）
      */
-    public static final int DEFAULT_HEARTBEAT_INTERVAL_BACKGROUND = 30 * 1000;
+    public static final int DEFAULT_HEARTBEAT_INTERVAL_BACKGROUND = 3000 * 1000;
 
     /**
      * 前台APP标识
@@ -80,7 +80,7 @@ public class ClientConfig {
     /**
      * 默认消息重发间隔时长
      */
-    public static final int DEFAULT_RESEND_INTERVAL = 8 * 1000;
+    public static final int DEFAULT_RESEND_INTERVAL = 10 * 1000;
 
     /**
      * 默认服务端请求成功状态

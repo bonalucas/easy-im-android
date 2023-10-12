@@ -27,7 +27,7 @@ public class HeartbeatHandler extends SimpleChannelInboundHandler<HeartBeatRespo
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HeartBeatResponseMessage msg) throws Exception {
         // 记录心跳日志
-        Log.i("HeartbeatHandler", "收到服务器的心跳响应信息");
+        Log.i(HeartbeatHandler.class.getSimpleName(), "收到服务器的心跳响应信息");
     }
 
 }

@@ -25,15 +25,23 @@ public class FileUploadRequestMessage extends Message {
      */
     private byte[] fileContent;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.FileUploadRequestMessage;
-    }
-
     public FileUploadRequestMessage() {
     }
 
     public FileUploadRequestMessage(String fileName, long fileSize, byte[] fileContent) {
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.fileContent = fileContent;
+    }
+
+    public FileUploadRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public FileUploadRequestMessage(String messageId, Boolean status, String fileName, long fileSize, byte[] fileContent) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.fileContent = fileContent;
@@ -62,4 +70,10 @@ public class FileUploadRequestMessage extends Message {
     public void setFileContent(byte[] fileContent) {
         this.fileContent = fileContent;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.FileUploadRequestMessage;
+    }
+
 }

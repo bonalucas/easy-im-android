@@ -18,15 +18,21 @@ public class SearchFriendResponseMessage extends Message {
      */
     private List<UserDto> list;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.SearchFriendResponseMessage;
-    }
-
     public SearchFriendResponseMessage() {
     }
 
     public SearchFriendResponseMessage(List<UserDto> list) {
+        this.list = list;
+    }
+
+    public SearchFriendResponseMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public SearchFriendResponseMessage(String messageId, Boolean status, List<UserDto> list) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.list = list;
     }
 
@@ -37,4 +43,10 @@ public class SearchFriendResponseMessage extends Message {
     public void setList(List<UserDto> list) {
         this.list = list;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.SearchFriendResponseMessage;
+    }
+
 }

@@ -62,7 +62,7 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         buffer.writeBytes(msg_bytes);
         // 输出
         out.add(buffer);
-        Log.d("MessageCodec","编码成功");
+        Log.i(MessageCodec.class.getSimpleName(), "encode: 编码成功");
     }
 
     @Override
@@ -70,7 +70,7 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         // 获取魔数并校验协议
         int magic_number = in.readInt();
         if (magic_number != MessageCodec.MAGIC_NUMBER) {
-            Log.e("MessageCodec","协议不匹配，忽略消息内容");
+            Log.e(MessageCodec.class.getSimpleName(),"协议不匹配，忽略消息内容");
             return;
         }
         // 获取解码后的消息类型
@@ -88,7 +88,7 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         Message msg = serializer.deserialize(Message.get(msg_type), msg_bytes);
         // 输出
         out.add(msg);
-        Log.d("MessageCodec","解码成功");
+        Log.i(MessageCodec.class.getSimpleName(), "decode: 解码成功");
     }
 
 }

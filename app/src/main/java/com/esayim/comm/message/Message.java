@@ -5,7 +5,6 @@ import com.esayim.comm.message.chat.ChatResponseMessage;
 import com.esayim.comm.message.dialog.DeleteDialogRequestMessage;
 import com.esayim.comm.message.dialog.DialogNoticeRequestMessage;
 import com.esayim.comm.message.dialog.DialogNoticeResponseMessage;
-import com.esayim.comm.message.error.GlobalErrorResponseMessage;
 import com.esayim.comm.message.file.FileUploadRequestMessage;
 import com.esayim.comm.message.file.FileUploadResponseMessage;
 import com.esayim.comm.message.friend.AddFriendRequestMessage;
@@ -38,17 +37,16 @@ public abstract class Message {
     private String messageId;
 
     /**
-     * 服务端状态
+     * 响应状态
      */
-    private String serverStatus;
+    private Boolean status;
 
     /**
-     * 消息类型Map
+     * 消息类型 MAP
      */
     private final static Map<Byte, Class<? extends Message>> messageType = new ConcurrentHashMap<>();
 
     static {
-        messageType.put(MessageTypeConstants.GlobalErrorResponseMessage, GlobalErrorResponseMessage.class);
         messageType.put(MessageTypeConstants.LoginRequestMessage, LoginRequestMessage.class);
         messageType.put(MessageTypeConstants.LoginResponseMessage, LoginResponseMessage.class);
         messageType.put(MessageTypeConstants.DialogNoticeRequestMessage, DialogNoticeRequestMessage.class);
@@ -71,12 +69,6 @@ public abstract class Message {
         messageType.put(MessageTypeConstants.TestResponseMessage, TestResponseMessage.class);
     }
 
-    /**
-     * 根据消息类型常量获取消息
-     *
-     * @param constant 消息类型常量
-     * @return 消息
-     */
     public static Class<? extends Message> get(Byte constant) {
         return messageType.get(constant);
     }
@@ -96,11 +88,12 @@ public abstract class Message {
         this.messageId = messageId;
     }
 
-    public String getServerStatus() {
-        return serverStatus;
+    public Boolean getStatus() {
+        return status;
     }
 
-    public void setServerStatus(String serverStatus) {
-        this.serverStatus = serverStatus;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
+
 }

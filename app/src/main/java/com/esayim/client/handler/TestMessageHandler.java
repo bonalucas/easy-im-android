@@ -19,6 +19,9 @@ public class TestMessageHandler extends SimpleChannelInboundHandler<TestResponse
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TestResponseMessage msg) throws Exception {
+        // 关闭消息重发
+        NettyClient.getInstance().getMessageRetransmissionManager().remove(msg.getMessageId());
+        // 回调消息到应用层
         NettyClient.getInstance().getMessageDispatcher().receiveMessage(msg);
     }
 

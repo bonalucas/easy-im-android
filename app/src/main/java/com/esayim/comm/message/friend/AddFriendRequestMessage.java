@@ -20,15 +20,22 @@ public class AddFriendRequestMessage extends Message {
      */
     private String friendId;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.AddFriendRequestMessage;
-    }
-
     public AddFriendRequestMessage() {
     }
 
     public AddFriendRequestMessage(String userId, String friendId) {
+        this.userId = userId;
+        this.friendId = friendId;
+    }
+
+    public AddFriendRequestMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public AddFriendRequestMessage(String messageId, Boolean status, String userId, String friendId) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.userId = userId;
         this.friendId = friendId;
     }
@@ -48,4 +55,10 @@ public class AddFriendRequestMessage extends Message {
     public void setFriendId(String friendId) {
         this.friendId = friendId;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.AddFriendRequestMessage;
+    }
+
 }

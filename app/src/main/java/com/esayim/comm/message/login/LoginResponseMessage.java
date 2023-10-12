@@ -45,15 +45,26 @@ public class LoginResponseMessage extends Message {
      */
     private List<FriendDto> friendList;
 
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.LoginResponseMessage;
-    }
-
     public LoginResponseMessage() {
     }
 
     public LoginResponseMessage(String userId, String userAvatar, String userNickname, List<DialogDto> dialogList, List<GroupDto> groupList, List<FriendDto> friendList) {
+        this.userId = userId;
+        this.userAvatar = userAvatar;
+        this.userNickname = userNickname;
+        this.dialogList = dialogList;
+        this.groupList = groupList;
+        this.friendList = friendList;
+    }
+
+    public LoginResponseMessage(String messageId, Boolean status) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
+    }
+
+    public LoginResponseMessage(String messageId, Boolean status, String userId, String userAvatar, String userNickname, List<DialogDto> dialogList, List<GroupDto> groupList, List<FriendDto> friendList) {
+        super.setMessageId(messageId);
+        super.setStatus(status);
         this.userId = userId;
         this.userAvatar = userAvatar;
         this.userNickname = userNickname;
@@ -109,6 +120,12 @@ public class LoginResponseMessage extends Message {
     public void setFriendList(List<FriendDto> friendList) {
         this.friendList = friendList;
     }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.LoginResponseMessage;
+    }
+
 }
 
 
