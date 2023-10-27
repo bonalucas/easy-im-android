@@ -15,7 +15,7 @@ public class SnowflakeIDGenerator {
     private static long lastTimestamp = -1L;
     private static long sequence = 0L;
 
-    public static synchronized String generateID() {
+    public static synchronized long generateID() {
         long currentTimestamp = System.currentTimeMillis() - EPOCH;
 
         if (currentTimestamp < lastTimestamp) {
@@ -33,7 +33,7 @@ public class SnowflakeIDGenerator {
 
         lastTimestamp = currentTimestamp;
 
-        return String.valueOf(((currentTimestamp << TIMESTAMP_SHIFT) | (machineId << MACHINE_ID_SHIFT) | sequence));
+        return ((currentTimestamp << TIMESTAMP_SHIFT) | (machineId << MACHINE_ID_SHIFT) | sequence);
     }
 
     private static long waitUntilNextMillis(long lastTimestamp) {

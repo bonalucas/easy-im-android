@@ -20,22 +20,12 @@ public class DeleteDialogRequestMessage extends Message {
      */
     private String senderId;
 
-    public DeleteDialogRequestMessage() {
-    }
-
-    public DeleteDialogRequestMessage(String dialogId, String senderId) {
-        this.dialogId = dialogId;
-        this.senderId = senderId;
-    }
-
-    public DeleteDialogRequestMessage(String messageId, Boolean status) {
+    public DeleteDialogRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public DeleteDialogRequestMessage(String messageId, Boolean status, String dialogId, String senderId) {
+    public DeleteDialogRequestMessage(long messageId, String dialogId, String senderId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.dialogId = dialogId;
         this.senderId = senderId;
     }

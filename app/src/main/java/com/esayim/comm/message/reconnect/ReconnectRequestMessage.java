@@ -15,21 +15,12 @@ public class ReconnectRequestMessage extends Message {
      */
     private String userId;
 
-    public ReconnectRequestMessage() {
-    }
-
-    public ReconnectRequestMessage(String userId) {
-        this.userId = userId;
-    }
-
-    public ReconnectRequestMessage(String messageId, Boolean status) {
+    public ReconnectRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public ReconnectRequestMessage(String messageId, Boolean status, String userId) {
+    public ReconnectRequestMessage(long messageId, String userId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.userId = userId;
     }
 

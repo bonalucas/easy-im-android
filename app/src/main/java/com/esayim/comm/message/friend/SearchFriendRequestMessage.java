@@ -20,22 +20,12 @@ public class SearchFriendRequestMessage extends Message {
      */
     private String searchKey;
 
-    public SearchFriendRequestMessage() {
-    }
-
-    public SearchFriendRequestMessage(String userId, String searchKey) {
-        this.userId = userId;
-        this.searchKey = searchKey;
-    }
-
-    public SearchFriendRequestMessage(String messageId, Boolean status) {
+    public SearchFriendRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public SearchFriendRequestMessage(String messageId, Boolean status, String userId, String searchKey) {
+    public SearchFriendRequestMessage(long messageId, String userId, String searchKey) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.userId = userId;
         this.searchKey = searchKey;
     }

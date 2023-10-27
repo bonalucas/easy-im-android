@@ -25,23 +25,12 @@ public class DialogNoticeRequestMessage extends Message {
      */
     private Integer dialogType;
 
-    public DialogNoticeRequestMessage() {
-    }
-
-    public DialogNoticeRequestMessage(String senderId, String receiverId, Integer dialogType) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.dialogType = dialogType;
-    }
-
-    public DialogNoticeRequestMessage(String messageId, Boolean status) {
+    public DialogNoticeRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public DialogNoticeRequestMessage(String messageId, Boolean status, String senderId, String receiverId, Integer dialogType) {
+    public DialogNoticeRequestMessage(long messageId, String senderId, String receiverId, Integer dialogType) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.dialogType = dialogType;

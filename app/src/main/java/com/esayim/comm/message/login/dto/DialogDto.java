@@ -113,4 +113,5 @@ public class DialogDto {
     public void setRecordList(List<RecordDto> recordList) {
         RecordList = recordList;
     }
+
 }

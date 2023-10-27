@@ -14,14 +14,12 @@ public class TestResponseMessage extends Message {
         this.content = content;
     }
 
-    public TestResponseMessage(String messageId, Boolean status) {
+    public TestResponseMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public TestResponseMessage(String messageId, Boolean status, String content) {
+    public TestResponseMessage(long messageId, String content) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.content = content;
     }
 

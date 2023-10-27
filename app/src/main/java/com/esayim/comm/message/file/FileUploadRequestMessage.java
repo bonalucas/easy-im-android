@@ -25,23 +25,12 @@ public class FileUploadRequestMessage extends Message {
      */
     private byte[] fileContent;
 
-    public FileUploadRequestMessage() {
-    }
-
-    public FileUploadRequestMessage(String fileName, long fileSize, byte[] fileContent) {
-        this.fileName = fileName;
-        this.fileSize = fileSize;
-        this.fileContent = fileContent;
-    }
-
-    public FileUploadRequestMessage(String messageId, Boolean status) {
+    public FileUploadRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public FileUploadRequestMessage(String messageId, Boolean status, String fileName, long fileSize, byte[] fileContent) {
+    public FileUploadRequestMessage(long messageId, String fileName, long fileSize, byte[] fileContent) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.fileContent = fileContent;

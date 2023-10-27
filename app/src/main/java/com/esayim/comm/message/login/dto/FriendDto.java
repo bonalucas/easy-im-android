@@ -54,4 +54,5 @@ public class FriendDto {
     public void setFriendAvatar(String friendAvatar) {
         this.friendAvatar = friendAvatar;
     }
+
 }

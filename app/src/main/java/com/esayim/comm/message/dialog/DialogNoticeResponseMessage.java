@@ -37,10 +37,12 @@ public class DialogNoticeResponseMessage extends Message {
      */
     private Date now;
 
-    public DialogNoticeResponseMessage() {
+    public DialogNoticeResponseMessage(long messageId) {
+        super.setMessageId(messageId);
     }
 
-    public DialogNoticeResponseMessage(String dialogId, String name, String avatar, String sketch, Date now) {
+    public DialogNoticeResponseMessage(long messageId, String dialogId, String name, String avatar, String sketch, Date now) {
+        super.setMessageId(messageId);
         this.dialogId = dialogId;
         this.name = name;
         this.avatar = avatar;
@@ -50,21 +52,6 @@ public class DialogNoticeResponseMessage extends Message {
 
     public String getDialogId() {
         return dialogId;
-    }
-
-    public DialogNoticeResponseMessage(String messageId, Boolean status) {
-        super.setMessageId(messageId);
-        super.setStatus(status);
-    }
-
-    public DialogNoticeResponseMessage(String messageId, Boolean status, String dialogId, String name, String avatar, String sketch, Date now) {
-        super.setMessageId(messageId);
-        super.setStatus(status);
-        this.dialogId = dialogId;
-        this.name = name;
-        this.avatar = avatar;
-        this.sketch = sketch;
-        this.now = now;
     }
 
     public void setDialogId(String dialogId) {

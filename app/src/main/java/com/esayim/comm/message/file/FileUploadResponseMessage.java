@@ -15,21 +15,12 @@ public class FileUploadResponseMessage extends Message {
      */
     private String fileUrl;
 
-    public FileUploadResponseMessage() {
-    }
-
-    public FileUploadResponseMessage(String fileUrl) {
-        this.fileUrl = fileUrl;
-    }
-
-    public FileUploadResponseMessage(String messageId, Boolean status) {
+    public FileUploadResponseMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public FileUploadResponseMessage(String messageId, Boolean status, String fileUrl) {
+    public FileUploadResponseMessage(long messageId, String fileUrl) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.fileUrl = fileUrl;
     }
 

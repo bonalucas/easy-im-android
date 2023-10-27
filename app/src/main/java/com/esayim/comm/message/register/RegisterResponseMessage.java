@@ -15,21 +15,12 @@ public class RegisterResponseMessage extends Message {
      */
     private String responseMsg;
 
-    public RegisterResponseMessage() {
-    }
-
-    public RegisterResponseMessage(String responseMsg) {
-        this.responseMsg = responseMsg;
-    }
-
-    public RegisterResponseMessage(String messageId, Boolean status) {
+    public RegisterResponseMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public RegisterResponseMessage(String messageId, Boolean status, String responseMsg) {
+    public RegisterResponseMessage(long messageId, String responseMsg) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.responseMsg = responseMsg;
     }
 

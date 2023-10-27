@@ -8,11 +8,15 @@ import com.esayim.comm.message.MessageTypeConstants;
  *
  * @author 单程车票
  */
-public class HeartBeatRequestMessage extends Message {
+public class PingMessage extends Message {
+
+    public PingMessage(Long messageId) {
+        super.setMessageId(messageId);
+    }
 
     @Override
     public Byte getConstant() {
-        return MessageTypeConstants.HeartBeatRequestMessage;
+        return MessageTypeConstants.PingMessage;
     }
 
 }

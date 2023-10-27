@@ -11,7 +11,7 @@ import com.esayim.client.listener.ClientConnectStatusCallback;
 import com.esayim.client.listener.ClientEventListener;
 import com.esayim.comm.message.Message;
 import com.esayim.comm.protocol.MessageCodec;
-import com.esayim.comm.protocol.ProcotolFrameDecoder;
+import com.esayim.comm.protocol.ProtocolFrameDecoder;
 
 import java.net.InetSocketAddress;
 
@@ -433,15 +433,15 @@ public class NettyClient {
     private void buildBootstrap() {
         EventLoopGroup workerGroup = new NioEventLoopGroup(4);
         Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(workerGroup);
-        bootstrap.channel(NioSocketChannel.class);
-        // 设置连接超时5s
-        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000);
-        // 开启 TCP 心跳机制
-        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
-        // 开启 Nagle 算法（保证高实时性）
-        bootstrap.option(ChannelOption.TCP_NODELAY, true);
-        bootstrap.handler(CLIENT_CHANNEL_INITIALIZER);
+        bootstrap.group(workerGroup)
+                .channel(NioSocketChannel.class)
+                // 设置连接超时5s
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                // 开启 TCP 心跳机制
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                // 开启 Nagle 算法（保证高实时性）
+                .option(ChannelOption.TCP_NODELAY, true)
+                .handler(CLIENT_CHANNEL_INITIALIZER);
         this.bootstrap = bootstrap;
     }
 
@@ -487,7 +487,7 @@ public class NettyClient {
         try {
             if (channel != null) {
                 removeHandler(ClientIdleStateHandler.class.getSimpleName());
-                removeHandler(ProcotolFrameDecoder.class.getSimpleName());
+                removeHandler(ProtocolFrameDecoder.class.getSimpleName());
                 removeHandler(MessageCodec.class.getSimpleName());
             }
         } catch (Exception ex) {

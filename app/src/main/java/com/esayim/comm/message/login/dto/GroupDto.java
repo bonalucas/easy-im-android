@@ -54,4 +54,5 @@ public class GroupDto {
     public void setGroupAvatar(String groupAvatar) {
         this.groupAvatar = groupAvatar;
     }
+
 }

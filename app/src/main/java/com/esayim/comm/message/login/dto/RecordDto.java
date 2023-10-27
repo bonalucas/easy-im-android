@@ -98,4 +98,5 @@ public class RecordDto {
     public void setRecordTime(Date recordTime) {
         this.recordTime = recordTime;
     }
+
 }

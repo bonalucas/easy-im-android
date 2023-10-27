@@ -40,7 +40,7 @@ public class ClientConfig {
     /**
      * 心跳消息间隔时长（后台）
      */
-    public static final int DEFAULT_HEARTBEAT_INTERVAL_BACKGROUND = 3000 * 1000;
+    public static final int DEFAULT_HEARTBEAT_INTERVAL_BACKGROUND = 30 * 1000;
 
     /**
      * 前台APP标识

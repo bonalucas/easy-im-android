@@ -20,22 +20,12 @@ public class AddFriendRequestMessage extends Message {
      */
     private String friendId;
 
-    public AddFriendRequestMessage() {
-    }
-
-    public AddFriendRequestMessage(String userId, String friendId) {
-        this.userId = userId;
-        this.friendId = friendId;
-    }
-
-    public AddFriendRequestMessage(String messageId, Boolean status) {
+    public AddFriendRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public AddFriendRequestMessage(String messageId, Boolean status, String userId, String friendId) {
+    public AddFriendRequestMessage(long messageId, String userId, String friendId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.userId = userId;
         this.friendId = friendId;
     }

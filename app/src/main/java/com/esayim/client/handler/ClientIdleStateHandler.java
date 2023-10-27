@@ -3,7 +3,8 @@ package com.esayim.client.handler;
 import android.util.Log;
 
 import com.esayim.client.NettyClient;
-import com.esayim.comm.message.heartbeat.HeartBeatRequestMessage;
+import com.esayim.client.common.SnowflakeIDGenerator;
+import com.esayim.comm.message.heartbeat.PingMessage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -76,7 +77,7 @@ public class ClientIdleStateHandler extends IdleStateHandler {
         @Override
         public void run() {
             if (ctx.channel().isActive()) {
-                nettyClient.sendMessage(new HeartBeatRequestMessage(), false);
+                nettyClient.sendMessage(new PingMessage(SnowflakeIDGenerator.generateID()), false);
             }
         }
     }

@@ -25,23 +25,12 @@ public class AddFriendResponseMessage extends Message {
      */
     private String friendAvatar;
 
-    public AddFriendResponseMessage() {
-    }
-
-    public AddFriendResponseMessage(String friendId, String friendNickname, String friendAvatar) {
-        this.friendId = friendId;
-        this.friendNickname = friendNickname;
-        this.friendAvatar = friendAvatar;
-    }
-
-    public AddFriendResponseMessage(String messageId, Boolean status) {
+    public AddFriendResponseMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public AddFriendResponseMessage(String messageId, Boolean status, String friendId, String friendNickname, String friendAvatar) {
+    public AddFriendResponseMessage(long messageId, String friendId, String friendNickname, String friendAvatar) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.friendId = friendId;
         this.friendNickname = friendNickname;
         this.friendAvatar = friendAvatar;

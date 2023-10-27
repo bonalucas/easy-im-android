@@ -14,15 +14,18 @@ public class TestRequestMessage extends Message {
         this.content = content;
     }
 
-    public TestRequestMessage(String messageId, Boolean status) {
+    public TestRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public TestRequestMessage(String messageId, Boolean status, String content) {
+    public TestRequestMessage(long messageId, String content) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.content = content;
+    }
+
+    @Override
+    public Byte getConstant() {
+        return MessageTypeConstants.TestRequestMessage;
     }
 
     public String getContent() {
@@ -31,11 +34,6 @@ public class TestRequestMessage extends Message {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    @Override
-    public Byte getConstant() {
-        return MessageTypeConstants.TestRequestMessage;
     }
 
 }

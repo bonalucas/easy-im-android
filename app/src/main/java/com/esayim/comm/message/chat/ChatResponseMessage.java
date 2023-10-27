@@ -32,24 +32,12 @@ public class ChatResponseMessage extends Message {
      */
     private Date now;
 
-    public ChatResponseMessage() {
-    }
-
-    public ChatResponseMessage(String senderId, String receiverId, String content, Date now) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.content = content;
-        this.now = now;
-    }
-
-    public ChatResponseMessage(String messageId, Boolean status) {
+    public ChatResponseMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public ChatResponseMessage(String messageId, Boolean status, String senderId, String receiverId, String content, Date now) {
+    public ChatResponseMessage(long messageId, String senderId, String receiverId, String content, Date now) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.content = content;

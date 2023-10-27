@@ -20,22 +20,12 @@ public class LoginRequestMessage extends Message {
      */
     private String userPassword;
 
-    public LoginRequestMessage() {
-    }
-
-    public LoginRequestMessage(String userId, String userPassword) {
-        this.userId = userId;
-        this.userPassword = userPassword;
-    }
-
-    public LoginRequestMessage(String messageId, Boolean status) {
+    public LoginRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public LoginRequestMessage(String messageId, Boolean status, String userId, String userPassword) {
+    public LoginRequestMessage(long messageId, String userId, String userPassword) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.userId = userId;
         this.userPassword = userPassword;
     }

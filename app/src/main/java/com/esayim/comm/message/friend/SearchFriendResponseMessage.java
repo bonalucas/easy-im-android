@@ -18,21 +18,12 @@ public class SearchFriendResponseMessage extends Message {
      */
     private List<UserDto> list;
 
-    public SearchFriendResponseMessage() {
-    }
-
-    public SearchFriendResponseMessage(List<UserDto> list) {
-        this.list = list;
-    }
-
-    public SearchFriendResponseMessage(String messageId, Boolean status) {
+    public SearchFriendResponseMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public SearchFriendResponseMessage(String messageId, Boolean status, List<UserDto> list) {
+    public SearchFriendResponseMessage(long messageId, List<UserDto> list) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.list = list;
     }
 

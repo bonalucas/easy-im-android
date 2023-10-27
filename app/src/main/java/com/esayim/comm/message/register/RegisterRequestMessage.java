@@ -30,24 +30,12 @@ public class RegisterRequestMessage extends Message {
      */
     private String avatar;
 
-    public RegisterRequestMessage() {
-    }
-
-    public RegisterRequestMessage(String username, String password, String nickname, String avatar) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.avatar = avatar;
-    }
-
-    public RegisterRequestMessage(String messageId, Boolean status) {
+    public RegisterRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public RegisterRequestMessage(String messageId, Boolean status, String username, String password, String nickname, String avatar) {
+    public RegisterRequestMessage(long messageId, String username, String password, String nickname, String avatar) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.username = username;
         this.password = password;
         this.nickname = nickname;

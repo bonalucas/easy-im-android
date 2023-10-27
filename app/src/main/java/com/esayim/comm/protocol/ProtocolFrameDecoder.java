@@ -3,11 +3,11 @@ package com.esayim.comm.protocol;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 /**
- * 自定义长度字段解码器
+ * 解决TCP粘包半包问题解码器
  *
  * @author 单程车票
  */
-public class ProcotolFrameDecoder extends LengthFieldBasedFrameDecoder {
+public class ProtocolFrameDecoder extends LengthFieldBasedFrameDecoder {
 
     /**
      * 数据最大长度
@@ -34,11 +34,11 @@ public class ProcotolFrameDecoder extends LengthFieldBasedFrameDecoder {
      */
     private static final int initialBytesToStrip = 0;
 
-    public ProcotolFrameDecoder() {
+    public ProtocolFrameDecoder() {
         this(maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip);
     }
 
-    public ProcotolFrameDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength, int lengthAdjustment, int initialBytesToStrip) {
+    public ProtocolFrameDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength, int lengthAdjustment, int initialBytesToStrip) {
         super(maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip);
     }
 

@@ -7,6 +7,13 @@ package com.esayim.comm.message;
  */
 public interface MessageTypeConstants {
 
+    // 握手消息
+    Byte HandShakeRequestMessage = 1;
+    Byte HandShakeResponseMessage = 2;
+    // 心跳消息
+    Byte PingMessage = 3;
+    Byte PongMessage = 4;
+    // 业务消息
     Byte LoginRequestMessage = 1;
     Byte LoginResponseMessage = 2;
     Byte AddFriendRequestMessage = 3;
@@ -23,8 +30,7 @@ public interface MessageTypeConstants {
     Byte RegisterRequestMessage = 14;
     Byte RegisterResponseMessage = 15;
     Byte ReconnectRequestMessage = 16;
-    Byte HeartBeatRequestMessage = 17;
-    Byte HeartBeatResponseMessage = 18;
+
     Byte TestRequestMessage = 19;
     Byte TestResponseMessage = 20;
 

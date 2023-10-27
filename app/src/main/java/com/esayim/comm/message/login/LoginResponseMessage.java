@@ -45,26 +45,12 @@ public class LoginResponseMessage extends Message {
      */
     private List<FriendDto> friendList;
 
-    public LoginResponseMessage() {
-    }
-
-    public LoginResponseMessage(String userId, String userAvatar, String userNickname, List<DialogDto> dialogList, List<GroupDto> groupList, List<FriendDto> friendList) {
-        this.userId = userId;
-        this.userAvatar = userAvatar;
-        this.userNickname = userNickname;
-        this.dialogList = dialogList;
-        this.groupList = groupList;
-        this.friendList = friendList;
-    }
-
-    public LoginResponseMessage(String messageId, Boolean status) {
+    public LoginResponseMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public LoginResponseMessage(String messageId, Boolean status, String userId, String userAvatar, String userNickname, List<DialogDto> dialogList, List<GroupDto> groupList, List<FriendDto> friendList) {
+    public LoginResponseMessage(long messageId, String userId, String userAvatar, String userNickname, List<DialogDto> dialogList, List<GroupDto> groupList, List<FriendDto> friendList) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.userId = userId;
         this.userAvatar = userAvatar;
         this.userNickname = userNickname;

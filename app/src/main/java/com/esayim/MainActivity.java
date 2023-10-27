@@ -1,26 +1,23 @@
 package com.esayim;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.esayim.client.NettyClient;
+import com.esayim.client.common.ClientConfig;
 import com.esayim.client.common.SnowflakeIDGenerator;
-import com.esayim.comm.message.heartbeat.HeartBeatRequestMessage;
+import com.esayim.comm.message.test.TestRequestMessage;
 import com.esayim.event.CEventCenter;
 import com.esayim.event.Events;
 import com.esayim.event.I_CEventListener;
-import com.esayim.client.NettyClient;
-import com.esayim.client.common.ClientConfig;
-import com.esayim.comm.message.test.TestRequestMessage;
 import com.esayim.service.MessageProcessor;
 import com.esayim.service.ServiceConnectStatusListener;
 import com.esayim.service.ServiceEventListener;
 import com.esayim.service.ServiceThreadPoolExecutor;
-
-import cn.hutool.core.util.IdUtil;
 
 
 public class MainActivity extends AppCompatActivity implements I_CEventListener {
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
     }
 
     public void sendTestMsg(View view) {
-        TestRequestMessage message = new TestRequestMessage(SnowflakeIDGenerator.generateID(), true, mEditText.getText().toString());
+        TestRequestMessage message = new TestRequestMessage(SnowflakeIDGenerator.generateID(), mEditText.getText().toString());
         MessageProcessor.getInstance().sendMessage(message);
     }
 

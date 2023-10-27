@@ -32,24 +32,12 @@ public class ChatRequestMessage extends Message {
      */
     private Date now;
 
-    public ChatRequestMessage() {
-    }
-
-    public ChatRequestMessage(String senderId, String receiverId, String content, Date now) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.content = content;
-        this.now = now;
-    }
-
-    public ChatRequestMessage(String messageId, Boolean status) {
+    public ChatRequestMessage(long messageId) {
         super.setMessageId(messageId);
-        super.setStatus(status);
     }
 
-    public ChatRequestMessage(String messageId, Boolean status, String senderId, String receiverId, String content, Date now) {
+    public ChatRequestMessage(long messageId, String senderId, String receiverId, String content, Date now) {
         super.setMessageId(messageId);
-        super.setStatus(status);
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.content = content;

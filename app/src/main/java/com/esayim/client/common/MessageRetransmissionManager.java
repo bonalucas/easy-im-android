@@ -22,7 +22,7 @@ public class MessageRetransmissionManager {
     /**
      * 发送的消息记录 Map
      */
-    private final Map<String, MessageTimer> messageTimeoutMap = new ConcurrentHashMap<>();
+    private final Map<Long, MessageTimer> messageTimeoutMap = new ConcurrentHashMap<>();
 
     /**
      * 客户端
@@ -39,7 +39,7 @@ public class MessageRetransmissionManager {
      * @param message 消息
      */
     public void add(Message message) {
-        String messageId = message.getMessageId();
+        Long messageId = message.getMessageId();
         if (!messageTimeoutMap.containsKey(messageId)) {
             MessageTimer timer = new MessageTimer(nettyClient, message);
             messageTimeoutMap.put(messageId, timer);
@@ -52,8 +52,8 @@ public class MessageRetransmissionManager {
      *
      * @param messageId 消息ID
      */
-    public void remove(String messageId) {
-        if (StringUtil.isNullOrEmpty(messageId)) {
+    public void remove(long messageId) {
+        if (messageId == 0L) {
             return;
         }
         MessageTimer timer = messageTimeoutMap.remove(messageId);
@@ -67,7 +67,7 @@ public class MessageRetransmissionManager {
      * 重连成功回调，重发消息发送超时管理器中所有的消息
      */
     public synchronized void onResetConnected() {
-        for (Map.Entry<String, MessageTimer> entry : messageTimeoutMap.entrySet()) {
+        for (Map.Entry<Long, MessageTimer> entry : messageTimeoutMap.entrySet()) {
             entry.getValue().sendMessage();
         }
     }
