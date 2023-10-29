@@ -10,8 +10,24 @@ import com.esayim.comm.message.MessageTypeConstants;
  */
 public class HandShakeResponseMessage extends Message {
 
-    public HandShakeResponseMessage(long messageId) {
-        super.setMessageId(messageId);
+    /**
+     * 反馈
+     */
+    private Boolean feedback;
+
+    public HandShakeResponseMessage() {
+    }
+
+    public HandShakeResponseMessage(Boolean feedback) {
+        this.feedback = feedback;
+    }
+
+    public Boolean getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(Boolean feedback) {
+        this.feedback = feedback;
     }
 
     @Override

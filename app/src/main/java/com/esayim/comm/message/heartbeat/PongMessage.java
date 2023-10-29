@@ -10,10 +10,6 @@ import com.esayim.comm.message.MessageTypeConstants;
  */
 public class PongMessage extends Message {
 
-    public PongMessage(Long messageId) {
-        super.setMessageId(messageId);
-    }
-
     @Override
     public Byte getConstant() {
         return MessageTypeConstants.PongMessage;

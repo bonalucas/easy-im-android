@@ -1,11 +1,12 @@
-package com.esayim.service.handler;
+package com.esayim.service.handler.impl;
 
-import com.esayim.event.CEventCenter;
-import com.esayim.event.Events;
 import com.esayim.comm.message.Message;
 import com.esayim.comm.message.test.TestResponseMessage;
+import com.esayim.event.CEventCenter;
+import com.esayim.event.Events;
+import com.esayim.service.handler.AbstractBaseMessageHandler;
 
-public class TestMessageServiceHandler extends AbstractBaseMessageHandler{
+public class TestMessageServiceHandler extends AbstractBaseMessageHandler {
 
     @Override
     public void execute(Message message) {

@@ -3,9 +3,9 @@ package com.esayim.service;
 import android.util.Log;
 
 import com.esayim.client.NettyClient;
+import com.esayim.comm.message.Message;
 import com.esayim.service.handler.BaseMessageHandler;
 import com.esayim.service.handler.MessageHandlerFactory;
-import com.esayim.comm.message.Message;
 
 /**
  * 消息处理器

@@ -1,7 +1,5 @@
 package com.esayim.service;
 
-import android.util.Log;
-
 import com.esayim.client.listener.ClientConnectStatusCallback;
 
 /**

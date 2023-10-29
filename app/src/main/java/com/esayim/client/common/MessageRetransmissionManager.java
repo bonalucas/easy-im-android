@@ -8,8 +8,6 @@ import com.esayim.comm.message.Message;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.netty.util.internal.StringUtil;
-
 /**
  * 消息重发管理器
  *

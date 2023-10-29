@@ -1,6 +1,7 @@
 package com.esayim.service.handler;
 
 import com.esayim.comm.message.MessageTypeConstants;
+import com.esayim.service.handler.impl.TestMessageServiceHandler;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

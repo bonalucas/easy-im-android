@@ -3,7 +3,6 @@ package com.esayim.client.handler;
 import android.util.Log;
 
 import com.esayim.client.NettyClient;
-import com.esayim.client.common.SnowflakeIDGenerator;
 import com.esayim.comm.message.heartbeat.PingMessage;
 
 import java.util.concurrent.TimeUnit;
@@ -18,9 +17,9 @@ import io.netty.handler.timeout.IdleStateHandler;
  *
  * @author 单程车票
  */
-public class ClientIdleStateHandler extends IdleStateHandler {
+public class EasyIMIdleStateHandler extends IdleStateHandler {
 
-    private static final String TAG = ClientIdleStateHandler.class.getSimpleName();
+    private static final String TAG = EasyIMIdleStateHandler.class.getSimpleName();
 
     /**
      * 客户端
@@ -37,7 +36,7 @@ public class ClientIdleStateHandler extends IdleStateHandler {
      */
     private HeartbeatTask heartbeatTask;
 
-    public ClientIdleStateHandler(NettyClient nettyClient, int heartbeatInterval) {
+    public EasyIMIdleStateHandler(NettyClient nettyClient, int heartbeatInterval) {
         super(heartbeatInterval * 3L, heartbeatInterval, 0L, TimeUnit.MILLISECONDS);
         this.nettyClient = nettyClient;
         this.heartbeatInterval = heartbeatInterval;
@@ -48,14 +47,14 @@ public class ClientIdleStateHandler extends IdleStateHandler {
         IdleState state = evt.state();
         switch (state) {
             case READER_IDLE: {
-                Log.i(TAG, (heartbeatInterval * 3) + " ms内未读到数据，自动触发客户端重连");
+                Log.i(TAG, String.format("%s ms内未读到数据，自动触发客户端重连", (heartbeatInterval * 3L)));
                 // 触发重连
                 nettyClient.reconnect(false);
                 break;
             }
 
             case WRITER_IDLE: {
-                Log.i(TAG, (heartbeatInterval) + " ms客户端未发送数据，自动触发发送心跳包");
+                Log.i(TAG, String.format("%s ms客户端未发送数据，自动触发发送心跳包", heartbeatInterval));
                 if (heartbeatTask == null) {
                     heartbeatTask = new HeartbeatTask(ctx);
                 }
@@ -77,7 +76,7 @@ public class ClientIdleStateHandler extends IdleStateHandler {
         @Override
         public void run() {
             if (ctx.channel().isActive()) {
-                nettyClient.sendMessage(new PingMessage(SnowflakeIDGenerator.generateID()), false);
+                nettyClient.sendMessage(new PingMessage(), false);
             }
         }
     }

@@ -6,7 +6,7 @@ import com.esayim.client.common.ClientConfig;
 import com.esayim.client.common.ClientExecutorService;
 import com.esayim.client.common.MessageDispatcher;
 import com.esayim.client.common.MessageRetransmissionManager;
-import com.esayim.client.handler.ClientIdleStateHandler;
+import com.esayim.client.handler.EasyIMIdleStateHandler;
 import com.esayim.client.listener.ClientConnectStatusCallback;
 import com.esayim.client.listener.ClientEventListener;
 import com.esayim.comm.message.Message;
@@ -244,14 +244,14 @@ public class NettyClient {
     public void addHeartbeatHandler() {
         if (channel == null || !channel.isActive() || channel.pipeline() == null) return;
         try {
-            String name = ClientIdleStateHandler.class.getSimpleName();
+            String name = "HeartBeat-Handler";
             // 移除之前的处理器
             removeHandler(name);
             // 添加新处理器（添加在最前面）
-            channel.pipeline().addFirst(name, new ClientIdleStateHandler(this, getHeartbeatInterval()));
-            Log.i(TAG, "添加心跳检测处理器成功,周期为" + getHeartbeatInterval() + "ms");
+            channel.pipeline().addFirst(name, new EasyIMIdleStateHandler(this, getHeartbeatInterval()));
+            Log.i(TAG, String.format("添加心跳检测处理器成功,周期为 %s ms", getHeartbeatInterval()));
         } catch (Exception e) {
-            Log.e(TAG, "添加心跳检测处理器失败：" + e.getMessage());
+            Log.e(TAG, String.format("添加心跳检测处理器失败：%s", e.getMessage()));
         }
     }
 
@@ -486,7 +486,7 @@ public class NettyClient {
     private void closeChannel() {
         try {
             if (channel != null) {
-                removeHandler(ClientIdleStateHandler.class.getSimpleName());
+                removeHandler(EasyIMIdleStateHandler.class.getSimpleName());
                 removeHandler(ProtocolFrameDecoder.class.getSimpleName());
                 removeHandler(MessageCodec.class.getSimpleName());
             }

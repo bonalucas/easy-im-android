@@ -1,25 +1,10 @@
 package com.esayim.comm.message;
 
-import com.esayim.comm.message.chat.ChatRequestMessage;
-import com.esayim.comm.message.chat.ChatResponseMessage;
-import com.esayim.comm.message.dialog.DeleteDialogRequestMessage;
-import com.esayim.comm.message.dialog.DialogNoticeRequestMessage;
-import com.esayim.comm.message.dialog.DialogNoticeResponseMessage;
-import com.esayim.comm.message.file.FileUploadRequestMessage;
-import com.esayim.comm.message.file.FileUploadResponseMessage;
-import com.esayim.comm.message.friend.AddFriendRequestMessage;
-import com.esayim.comm.message.friend.AddFriendResponseMessage;
-import com.esayim.comm.message.friend.SearchFriendRequestMessage;
-import com.esayim.comm.message.friend.SearchFriendResponseMessage;
+import com.esayim.comm.message.error.ErrorResponseMessage;
 import com.esayim.comm.message.handshake.HandShakeRequestMessage;
 import com.esayim.comm.message.handshake.HandShakeResponseMessage;
 import com.esayim.comm.message.heartbeat.PingMessage;
 import com.esayim.comm.message.heartbeat.PongMessage;
-import com.esayim.comm.message.login.LoginRequestMessage;
-import com.esayim.comm.message.login.LoginResponseMessage;
-import com.esayim.comm.message.reconnect.ReconnectRequestMessage;
-import com.esayim.comm.message.register.RegisterRequestMessage;
-import com.esayim.comm.message.register.RegisterResponseMessage;
 import com.esayim.comm.message.test.TestRequestMessage;
 import com.esayim.comm.message.test.TestResponseMessage;
 
@@ -51,22 +36,7 @@ public abstract class Message {
         MAP.put(MessageTypeConstants.PingMessage, PingMessage.class);
         MAP.put(MessageTypeConstants.PongMessage, PongMessage.class);
         // 业务消息
-        MAP.put(MessageTypeConstants.LoginRequestMessage, LoginRequestMessage.class);
-        MAP.put(MessageTypeConstants.LoginResponseMessage, LoginResponseMessage.class);
-        MAP.put(MessageTypeConstants.DialogNoticeRequestMessage, DialogNoticeRequestMessage.class);
-        MAP.put(MessageTypeConstants.DialogNoticeResponseMessage, DialogNoticeResponseMessage.class);
-        MAP.put(MessageTypeConstants.DeleteDialogRequestMessage, DeleteDialogRequestMessage.class);
-        MAP.put(MessageTypeConstants.SearchFriendRequestMessage, SearchFriendRequestMessage.class);
-        MAP.put(MessageTypeConstants.SearchFriendResponseMessage, SearchFriendResponseMessage.class);
-        MAP.put(MessageTypeConstants.AddFriendRequestMessage, AddFriendRequestMessage.class);
-        MAP.put(MessageTypeConstants.AddFriendResponseMessage, AddFriendResponseMessage.class);
-        MAP.put(MessageTypeConstants.ChatRequestMessage, ChatRequestMessage.class);
-        MAP.put(MessageTypeConstants.ChatResponseMessage, ChatResponseMessage.class);
-        MAP.put(MessageTypeConstants.FileUploadRequestMessage, FileUploadRequestMessage.class);
-        MAP.put(MessageTypeConstants.FileUploadResponseMessage, FileUploadResponseMessage.class);
-        MAP.put(MessageTypeConstants.RegisterRequestMessage, RegisterRequestMessage.class);
-        MAP.put(MessageTypeConstants.RegisterResponseMessage, RegisterResponseMessage.class);
-        MAP.put(MessageTypeConstants.ReconnectRequestMessage, ReconnectRequestMessage.class);
+        MAP.put(MessageTypeConstants.ErrorResponseMessage, ErrorResponseMessage.class);
         MAP.put(MessageTypeConstants.TestRequestMessage, TestRequestMessage.class);
         MAP.put(MessageTypeConstants.TestResponseMessage, TestResponseMessage.class);
     }
