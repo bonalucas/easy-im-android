@@ -70,7 +70,7 @@ public class ClientConfig {
     /**
      * 连接超时时长
      */
-    public static final int DEFAULT_CONNECT_TIMEOUT = 10 * 1000;
+    public static final int DEFAULT_CONNECT_TIMEOUT = 5 * 1000;
 
     /**
      * 默认消息发送失败重发次数

@@ -21,33 +21,4 @@ public class ServiceEventListener implements ClientEventListener {
         return true;
     }
 
-    @Override
-    public int getReconnectInterval() {
-        return 0;
-    }
-
-    @Override
-    public int getConnectTimeout() {
-        return 0;
-    }
-
-    @Override
-    public int getForegroundHeartbeatInterval() {
-        return 0;
-    }
-
-    @Override
-    public int getBackgroundHeartbeatInterval() {
-        return 0;
-    }
-
-    @Override
-    public int getResendCount() {
-        return 0;
-    }
-
-    @Override
-    public int getResendInterval() {
-        return 0;
-    }
 }

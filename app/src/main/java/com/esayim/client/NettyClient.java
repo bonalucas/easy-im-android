@@ -91,44 +91,14 @@ public class NettyClient {
     private int connectStatus = ClientConfig.CONNECT_STATE_FAILURE;
 
     /**
-     * 重连周期中尝试连接的间隔时长
-     */
-    private int reconnectInterval = ClientConfig.DEFAULT_RECONNECT_BASE_DELAY_TIME;
-
-    /**
      * 心跳间隔时间（默认前台）
      */
     private int heartbeatInterval = ClientConfig.DEFAULT_HEARTBEAT_INTERVAL_FOREGROUND;
 
     /**
-     * 前台心跳间隔时间
-     */
-    private int foregroundHeartbeatInterval = ClientConfig.DEFAULT_HEARTBEAT_INTERVAL_FOREGROUND;
-
-    /**
-     * 后台心跳间隔时间
-     */
-    private int backgroundHeartbeatInterval = ClientConfig.DEFAULT_HEARTBEAT_INTERVAL_BACKGROUND;
-
-    /**
      * app状态
      */
     private int appStatus = ClientConfig.APP_STATUS_FOREGROUND;
-
-    /**
-     * 连接超时时长
-     */
-    private int connectTimeout = ClientConfig.DEFAULT_CONNECT_TIMEOUT;
-
-    /**
-     * 消息超时重发次数
-     */
-    private int resendCount = ClientConfig.DEFAULT_RESEND_COUNT;
-
-    /**
-     * 消息超时发送失败间隔h时长
-     */
-    private int resendInterval = ClientConfig.DEFAULT_RESEND_INTERVAL;
 
     /**
      * 服务器地址
@@ -185,13 +155,15 @@ public class NettyClient {
     }
 
     /**
-     * 客户端重连
+     * 客户端连接方法
+     *
+     * @param isFirst 首次连接标识
      */
     public void reconnect(boolean isFirst) {
         // 判断是否是首次连接
         if (!isFirst) {
             try {
-                // 非首次连接，休眠一个周期
+                // 非首次连接，等待一个重连周期间隔时长
                 Thread.sleep(ClientConfig.DEFAULT_RECONNECT_INTERVAL);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -223,7 +195,7 @@ public class NettyClient {
     public void sendMessage(Message message, boolean enabled) {
         // 判断通道是否为空
         if (channel == null) {
-            Log.e(TAG, "发送消息失败：通道为空（Channel is null）");
+            Log.e(TAG, "发送消息失败 【cause：Channel is null】");
             return;
         }
         // 开启消息重发器（延迟 10s 重发消息）
@@ -234,7 +206,7 @@ public class NettyClient {
         try {
             channel.writeAndFlush(message);
         } catch (Exception e) {
-            Log.e(TAG, "发送消息失败：" + e.getMessage());
+            Log.e(TAG, String.format("发送消息失败 【cause：%s】", e.getMessage()));
         }
     }
 
@@ -251,7 +223,7 @@ public class NettyClient {
             channel.pipeline().addFirst(name, new EasyIMIdleStateHandler(this, getHeartbeatInterval()));
             Log.i(TAG, String.format("添加心跳检测处理器成功,周期为 %s ms", getHeartbeatInterval()));
         } catch (Exception e) {
-            Log.e(TAG, String.format("添加心跳检测处理器失败：%s", e.getMessage()));
+            Log.e(TAG, String.format("添加心跳检测处理器失败 【cause：%s】", e.getMessage()));
         }
     }
 
@@ -301,20 +273,13 @@ public class NettyClient {
 
     /**
      * 获取连接超时时长
-     *
-     * @return 连接超时时长
      */
     public int getConnectTimeout() {
-        if (clientEventListener != null && clientEventListener.getConnectTimeout() > 0) {
-            return connectTimeout = clientEventListener.getConnectTimeout();
-        }
-        return connectTimeout;
+        return ClientConfig.DEFAULT_CONNECT_TIMEOUT;
     }
 
     /**
      * 获取心跳间隔时长
-     *
-     * @return 心跳间隔时长
      */
     public int getHeartbeatInterval() {
         return this.heartbeatInterval;
@@ -322,20 +287,13 @@ public class NettyClient {
 
     /**
      * 获取重连间隔时长
-     *
-     * @return 重连间隔时长
      */
     public int getReconnectInterval() {
-        if (clientEventListener != null && clientEventListener.getReconnectInterval() > 0) {
-            return reconnectInterval = clientEventListener.getReconnectInterval();
-        }
-        return reconnectInterval;
+        return ClientConfig.DEFAULT_RECONNECT_BASE_DELAY_TIME;
     }
 
     /**
      * 获取客户端关闭状态
-     *
-     * @return 是否关闭
      */
     public boolean isClosed() {
         return this.isClosed;
@@ -343,26 +301,16 @@ public class NettyClient {
 
     /**
      * 获取心跳间隔时长（前台）
-     *
-     * @return 心跳间隔时长
      */
     public int getForegroundHeartbeatInterval() {
-        if (clientEventListener != null && clientEventListener.getForegroundHeartbeatInterval() > 0) {
-            return foregroundHeartbeatInterval = clientEventListener.getForegroundHeartbeatInterval();
-        }
-        return foregroundHeartbeatInterval;
+        return ClientConfig.DEFAULT_HEARTBEAT_INTERVAL_FOREGROUND;
     }
 
     /**
      * 获取心跳间隔时长（后台）
-     *
-     * @return 心跳间隔时长
      */
     public int getBackgroundHeartbeatInterval() {
-        if (clientEventListener != null && clientEventListener.getBackgroundHeartbeatInterval() > 0) {
-            return backgroundHeartbeatInterval = clientEventListener.getBackgroundHeartbeatInterval();
-        }
-        return backgroundHeartbeatInterval;
+        return ClientConfig.DEFAULT_HEARTBEAT_INTERVAL_BACKGROUND;
     }
 
     /**
@@ -371,28 +319,18 @@ public class NettyClient {
      * @return 消息超时重发次数
      */
     public int getResendCount() {
-        if (clientEventListener != null && clientEventListener.getResendCount() > 0) {
-            return resendCount = clientEventListener.getResendCount();
-        }
-        return resendCount;
+        return ClientConfig.DEFAULT_RESEND_COUNT;
     }
 
     /**
      * 获取消息发送超时重发间隔
-     *
-     * @return 消息发送超时重发间隔
      */
     public int getResendInterval() {
-        if (clientEventListener != null && clientEventListener.getReconnectInterval() != 0) {
-            return resendInterval = clientEventListener.getResendInterval();
-        }
-        return resendInterval;
+        return ClientConfig.DEFAULT_RESEND_INTERVAL;
     }
 
     /**
      * 获取APP状态
-     *
-     * @return APP状态
      */
     public int getAppStatus() {
         return this.appStatus;
@@ -400,8 +338,6 @@ public class NettyClient {
 
     /**
      * 获取客户端线程池
-     *
-     * @return 客户端线程池
      */
     public ClientExecutorService getClientExecutorService() {
         return this.clientExecutorService;
@@ -409,8 +345,6 @@ public class NettyClient {
 
     /**
      * 获取消息分发器
-     *
-     * @return 消息分发器
      */
     public MessageDispatcher getMessageDispatcher() {
         return this.messageDispatcher;
@@ -418,8 +352,6 @@ public class NettyClient {
 
     /**
      * 获取消息超时管理器
-     *
-     * @return 消息超时管理器
      */
     public MessageRetransmissionManager getMessageRetransmissionManager() {
         return this.messageRetransmissionManager;
@@ -436,7 +368,7 @@ public class NettyClient {
         bootstrap.group(workerGroup)
                 .channel(NioSocketChannel.class)
                 // 设置连接超时5s
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, getConnectTimeout())
                 // 开启 TCP 心跳机制
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 // 开启 Nagle 算法（保证高实时性）
@@ -516,7 +448,7 @@ public class NettyClient {
                 channel.pipeline().remove(handlerName);
             }
         } catch (Exception e) {
-            Log.e(TAG, "移除handler失败，handlerName=" + handlerName);
+            Log.e(TAG, String.format("移除handler失败，handlerName= %s", handlerName));
         }
     }
 
