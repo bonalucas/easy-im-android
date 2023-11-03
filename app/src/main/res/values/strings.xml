@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">easy-im-client</string>
+    <string name="enter_meeting">加入会议</string>
+    <string name="create_meeting">创建会议</string>
 </resources>

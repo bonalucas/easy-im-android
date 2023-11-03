@@ -5,6 +5,10 @@ plugins {
 android {
     compileSdk 34
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     defaultConfig {
         applicationId "com.esayim"
         minSdk 34
@@ -42,4 +46,8 @@ dependencies {
     implementation 'com.dyuproject.protostuff:protostuff-runtime:1.0.10'
     implementation 'com.alibaba:fastjson:2.0.32'
     implementation 'cn.hutool:hutool-core:5.8.16'
+    implementation 'org.webrtc:google-webrtc:1.0.32006'
+    implementation('io.socket:socket.io-client:0.8.3') {
+        exclude group: 'org.json', module: 'json'
+    }
 }
