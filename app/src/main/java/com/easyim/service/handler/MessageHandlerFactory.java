@@ -3,6 +3,7 @@ package com.easyim.service.handler;
 import com.easyim.comm.message.MessageTypeConstants;
 import com.easyim.service.handler.impl.CreateMeetingServiceHandler;
 import com.easyim.service.handler.impl.ErrorMessageServiceHandler;
+import com.easyim.service.handler.impl.JoinMeetingServiceHandler;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,6 +20,7 @@ public class MessageHandlerFactory {
     static {
         handlerMap.put(MessageTypeConstants.ErrorResponseMessage, new ErrorMessageServiceHandler());
         handlerMap.put(MessageTypeConstants.CreateMeetingResponseMessage, new CreateMeetingServiceHandler());
+        handlerMap.put(MessageTypeConstants.JoinMeetingResponseMessage, new JoinMeetingServiceHandler());
     }
 
     /**

@@ -1,10 +1,9 @@
-package com.easyim.service;
+package com.easyim.service.common;
 
 import android.util.Log;
 
 import com.easyim.client.NettyClient;
 import com.easyim.comm.message.Message;
-import com.easyim.service.common.ServiceThreadPoolExecutor;
 import com.easyim.service.handler.BaseMessageHandler;
 import com.easyim.service.handler.MessageHandlerFactory;
 

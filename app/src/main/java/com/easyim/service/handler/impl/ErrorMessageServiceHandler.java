@@ -17,7 +17,7 @@ public class ErrorMessageServiceHandler extends AbstractBaseMessageHandler {
     public void execute(Message message) {
         if (message instanceof ErrorResponseMessage) {
             ErrorResponseMessage msg = (ErrorResponseMessage) message;
-            CEventCenter.dispatchEvent(Events.SERVER_ERROR, 0, 0, msg);
+            CEventCenter.dispatchEvent(Events.SERVER_ERROR, 0, 0, msg.getError());
         }
     }
 

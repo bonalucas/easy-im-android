@@ -4,6 +4,7 @@ import com.easyim.client.handler.ExceptionHandler;
 import com.easyim.client.handler.HandShakeHandler;
 import com.easyim.client.handler.HeartBeatHandler;
 import com.easyim.client.handler.biz.CreateMeetingHandler;
+import com.easyim.client.handler.biz.JoinMeetingHandler;
 import com.easyim.client.handler.biz.ServerErrorHandler;
 import com.easyim.comm.protocol.MessageCodec;
 import com.easyim.comm.protocol.ProtocolFrameDecoder;
@@ -32,8 +33,9 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
         // 添加心跳包响应处理器
         socketChannel.pipeline().addLast(HeartBeatHandler.class.getSimpleName(), HeartBeatHandler.getInstance());
         // 添加自定义业务处理器
-        socketChannel.pipeline().addLast(CreateMeetingHandler.class.getSimpleName(), CreateMeetingHandler.getInstance());
         socketChannel.pipeline().addLast(ServerErrorHandler.class.getSimpleName(), ServerErrorHandler.getInstance());
+        socketChannel.pipeline().addLast(CreateMeetingHandler.class.getSimpleName(), CreateMeetingHandler.getInstance());
+        socketChannel.pipeline().addLast(JoinMeetingHandler.class.getSimpleName(), JoinMeetingHandler.getInstance());
         // 添加监控处理器
         socketChannel.pipeline().addLast(ExceptionHandler.class.getSimpleName(), ExceptionHandler.getInstance());
     }

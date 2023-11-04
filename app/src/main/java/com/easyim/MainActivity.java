@@ -19,10 +19,12 @@ import com.easyim.client.common.ClientConfig;
 import com.easyim.client.common.SnowflakeIDGenerator;
 import com.easyim.comm.message.meeting.CreateMeetingRequestMessage;
 import com.easyim.comm.message.meeting.CreateMeetingResponseMessage;
+import com.easyim.comm.message.meeting.JoinMeetingRequestMessage;
+import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
 import com.easyim.event.CEventCenter;
 import com.easyim.event.Events;
 import com.easyim.event.I_CEventListener;
-import com.easyim.service.MessageProcessor;
+import com.easyim.service.common.MessageProcessor;
 import com.easyim.service.common.FastUniqueIDGenerator;
 import com.easyim.service.common.ServiceThreadPoolExecutor;
 
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
 
         NettyClient nettyClient = NettyClient.getInstance();
         nettyClient.init(ClientConfig.APP_STATUS_BACKGROUND);
-        CEventCenter.registerEventListener(this, new String[]{ Events.CREATE_MEETING, Events.SERVER_ERROR });
+        CEventCenter.registerEventListener(this, new String[]{ Events.CREATE_MEETING, Events.SERVER_ERROR, Events.JOIN_MEETING });
 
         Button buttonJoinMeeting = findViewById(R.id.buttonJoinMeeting);
         Button buttonCreateMeeting = findViewById(R.id.buttonCreateMeeting);
@@ -124,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 String meetingNumber = editTextMeetingNumber.getText().toString();
                 String nickName = editTextNickName.getText().toString();
 
-                // 这里可以执行加入会议的逻辑，例如打开另一个 Activity 或执行相应操作
-                // 你可以根据自己的需求来实现加入会议的功能
+                JoinMeetingRequestMessage message = new JoinMeetingRequestMessage(SnowflakeIDGenerator.generateID(), meetingNumber, nickName);
+                MessageProcessor.getInstance().sendMessage(message);
 
                 // 关闭弹窗
                 dialog.dismiss();
@@ -141,10 +143,25 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
             case Events.CREATE_MEETING: {
                 if (obj instanceof CreateMeetingResponseMessage) {
                     CreateMeetingResponseMessage msg = (CreateMeetingResponseMessage) obj;
-                    ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, String.format("创建会议成功,会议号为【%s】", msg.getMessageId()), Toast.LENGTH_SHORT).show());
+                    ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, String.format("创建会议成功,会议号为【%s】", msg.getMeetingId()), Toast.LENGTH_SHORT).show());
                 }
                 break;
             }
+
+            case Events.JOIN_MEETING: {
+                if (obj instanceof JoinMeetingResponseMessage) {
+                    JoinMeetingResponseMessage msg = (JoinMeetingResponseMessage) obj;
+                    ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, String.format("加入会议成功,会议号为【%s】", msg.getMeetingId()), Toast.LENGTH_SHORT).show());
+                }
+                break;
+            }
+
+            case Events.SERVER_ERROR: {
+                String errorMsg = (String) obj;
+                ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, errorMsg, Toast.LENGTH_SHORT).show());
+                break;
+            }
+
             default:
                 break;
         }

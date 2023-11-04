@@ -10,4 +10,6 @@ public class Events {
 
     public static final String CREATE_MEETING = "create_meeting";
 
+    public static final String JOIN_MEETING = "join_meeting";
+
 }

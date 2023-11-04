@@ -7,6 +7,8 @@ import com.easyim.comm.message.heartbeat.PingMessage;
 import com.easyim.comm.message.heartbeat.PongMessage;
 import com.easyim.comm.message.meeting.CreateMeetingRequestMessage;
 import com.easyim.comm.message.meeting.CreateMeetingResponseMessage;
+import com.easyim.comm.message.meeting.JoinMeetingRequestMessage;
+import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,6 +41,8 @@ public abstract class Message {
         MAP.put(MessageTypeConstants.ErrorResponseMessage, ErrorResponseMessage.class);
         MAP.put(MessageTypeConstants.CreateMeetingRequestMessage, CreateMeetingRequestMessage.class);
         MAP.put(MessageTypeConstants.CreateMeetingResponseMessage, CreateMeetingResponseMessage.class);
+        MAP.put(MessageTypeConstants.JoinMeetingRequestMessage, JoinMeetingRequestMessage.class);
+        MAP.put(MessageTypeConstants.JoinMeetingResponseMessage, JoinMeetingResponseMessage.class);
     }
 
     public Long getMessageId() {

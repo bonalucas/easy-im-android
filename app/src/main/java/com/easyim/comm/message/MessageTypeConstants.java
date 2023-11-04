@@ -17,5 +17,7 @@ public interface MessageTypeConstants {
     Byte ErrorResponseMessage = 5;
     Byte CreateMeetingRequestMessage = 6;
     Byte CreateMeetingResponseMessage = 7;
+    Byte JoinMeetingRequestMessage = 8;
+    Byte JoinMeetingResponseMessage = 9;
 
 }
