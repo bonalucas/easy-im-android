@@ -18,7 +18,7 @@ public class MessageHandlerFactory {
 
     static {
         handlerMap.put(MessageTypeConstants.ErrorResponseMessage, new ErrorMessageServiceHandler());
-        handlerMap.put(MessageTypeConstants.MeetingCreateResponseMessage, new CreateMeetingServiceHandler());
+        handlerMap.put(MessageTypeConstants.CreateMeetingResponseMessage, new CreateMeetingServiceHandler());
     }
 
     /**

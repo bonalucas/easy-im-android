@@ -5,8 +5,8 @@ import com.easyim.comm.message.handshake.HandShakeRequestMessage;
 import com.easyim.comm.message.handshake.HandShakeResponseMessage;
 import com.easyim.comm.message.heartbeat.PingMessage;
 import com.easyim.comm.message.heartbeat.PongMessage;
-import com.easyim.comm.message.meeting.MeetingCreateRequestMessage;
-import com.easyim.comm.message.meeting.MeetingCreateResponseMessage;
+import com.easyim.comm.message.meeting.CreateMeetingRequestMessage;
+import com.easyim.comm.message.meeting.CreateMeetingResponseMessage;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,8 +37,8 @@ public abstract class Message {
         MAP.put(MessageTypeConstants.PongMessage, PongMessage.class);
         // 业务消息
         MAP.put(MessageTypeConstants.ErrorResponseMessage, ErrorResponseMessage.class);
-        MAP.put(MessageTypeConstants.MeetingCreateRequestMessage, MeetingCreateRequestMessage.class);
-        MAP.put(MessageTypeConstants.MeetingCreateResponseMessage, MeetingCreateResponseMessage.class);
+        MAP.put(MessageTypeConstants.CreateMeetingRequestMessage, CreateMeetingRequestMessage.class);
+        MAP.put(MessageTypeConstants.CreateMeetingResponseMessage, CreateMeetingResponseMessage.class);
     }
 
     public Long getMessageId() {

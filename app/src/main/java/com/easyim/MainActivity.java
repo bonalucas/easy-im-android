@@ -16,8 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.easyim.client.NettyClient;
 import com.easyim.client.common.ClientConfig;
-import com.easyim.comm.message.meeting.MeetingCreateRequestMessage;
-import com.easyim.comm.message.meeting.MeetingCreateResponseMessage;
+import com.easyim.client.common.SnowflakeIDGenerator;
+import com.easyim.comm.message.meeting.CreateMeetingRequestMessage;
+import com.easyim.comm.message.meeting.CreateMeetingResponseMessage;
 import com.easyim.event.CEventCenter;
 import com.easyim.event.Events;
 import com.easyim.event.I_CEventListener;
@@ -95,10 +96,8 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 String meetingTitle = editTextMeetingTitle.getText().toString();
                 String nickName = editTextNickName.getText().toString();
 
-//                MeetingCreateRequestMessage message = new MeetingCreateRequestMessage(SnowflakeIDGenerator.generateID(),
-//                        generatedMeetingNumber, nickName, meetingTitle);
-                MeetingCreateRequestMessage message = new MeetingCreateRequestMessage(375635370999549952L,
-                        "960994266", "yyp", "yp");
+                CreateMeetingRequestMessage message = new CreateMeetingRequestMessage(SnowflakeIDGenerator.generateID(),
+                        generatedMeetingNumber, meetingTitle, nickName);
                 MessageProcessor.getInstance().sendMessage(message);
 
                 // 关闭弹窗
@@ -140,9 +139,9 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
     public void onCEvent(String topic, int msgCode, int resultCode, Object obj) {
         switch (topic) {
             case Events.CREATE_MEETING: {
-                if (obj instanceof MeetingCreateResponseMessage) {
-                    MeetingCreateResponseMessage msg = (MeetingCreateResponseMessage) obj;
-                    ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, String.format("创建会议成功,会议号为【%s】", msg.getMeetingID()), Toast.LENGTH_SHORT).show());
+                if (obj instanceof CreateMeetingResponseMessage) {
+                    CreateMeetingResponseMessage msg = (CreateMeetingResponseMessage) obj;
+                    ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, String.format("创建会议成功,会议号为【%s】", msg.getMessageId()), Toast.LENGTH_SHORT).show());
                 }
                 break;
             }

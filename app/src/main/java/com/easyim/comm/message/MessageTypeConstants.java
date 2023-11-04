@@ -15,7 +15,7 @@ public interface MessageTypeConstants {
     Byte PongMessage = 4;
     // 业务消息
     Byte ErrorResponseMessage = 5;
-    Byte MeetingCreateRequestMessage = 6;
-    Byte MeetingCreateResponseMessage = 7;
+    Byte CreateMeetingRequestMessage = 6;
+    Byte CreateMeetingResponseMessage = 7;
 
 }
