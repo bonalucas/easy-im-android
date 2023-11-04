@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:id="@+id/toolbar"
+    android:background="?attr/colorPrimary">
+
+    <!-- 左侧退出会议按钮 -->
+    <ImageButton
+        android:id="@+id/buttonExitMeeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="退出会议"
+        android:minHeight="48dp"
+        android:src="@drawable/ic_exit" />
+
+    <!-- 中间的会议主题文本 -->
+    <TextView
+        android:id="@+id/textViewMeetingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="会议主题名"
+        android:textColor="#fff"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <!-- 右侧的上传文件按钮 -->
+    <ImageButton
+        android:id="@+id/buttonUploadFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="上传文件"
+        android:minHeight="48dp"
+        android:src="@drawable/ic_upload" />
+
+    <!-- 右侧的麦克风按钮 -->
+    <ImageButton
+        android:id="@+id/buttonMic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/buttonUploadFile"
+        android:contentDescription="麦克风"
+        android:minHeight="48dp"
+        android:src="@drawable/ic_voice_off" />
+
+</RelativeLayout>

@@ -28,7 +28,11 @@ import com.easyim.service.common.MessageProcessor;
 import com.easyim.service.common.FastUniqueIDGenerator;
 import com.easyim.service.common.ServiceThreadPoolExecutor;
 
-
+/**
+ * 首页活动
+ *
+ * @author 单程车票
+ */
 public class MainActivity extends AppCompatActivity implements I_CEventListener {
 
     @Override

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -23,21 +24,24 @@
             android:id="@+id/buttonCopyMeetingNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="复制会议号"
             android:src="@drawable/ic_copy"
-            android:contentDescription="复制会议号" />
+            tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
     <EditText
         android:id="@+id/editTextMeetingTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="会议主题" />
+        android:hint="会议主题"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/editTextNickName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="入会昵称" />
+        android:hint="入会昵称"
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/buttonCreateMeetingDialog"

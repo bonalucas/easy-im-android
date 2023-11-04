@@ -17,7 +17,17 @@
         android:theme="@style/Theme.Easyimclient"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.easyim.MainActivity"
+            android:name=".MainActivity"
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name=".activity.MeetingActivity"
+            android:label="会议页面"
+            android:theme="@style/Theme.Easyimclient"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

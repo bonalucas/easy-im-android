@@ -10,13 +10,15 @@
         android:id="@+id/editTextMeetingNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="会议号" />
+        android:hint="会议号"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/editTextNickName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="入会昵称" />
+        android:hint="入会昵称"
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/buttonJoinMeetingDialog"

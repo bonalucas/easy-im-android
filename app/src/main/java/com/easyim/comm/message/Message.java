@@ -43,6 +43,8 @@ public abstract class Message {
         MAP.put(MessageTypeConstants.CreateMeetingResponseMessage, CreateMeetingResponseMessage.class);
         MAP.put(MessageTypeConstants.JoinMeetingRequestMessage, JoinMeetingRequestMessage.class);
         MAP.put(MessageTypeConstants.JoinMeetingResponseMessage, JoinMeetingResponseMessage.class);
+        MAP.put(MessageTypeConstants.ChatRequestMessage, ChatRequestMessage.class);
+        MAP.put(MessageTypeConstants.ChatResponseMessage, ChatResponseMessage.class);
     }
 
     public Long getMessageId() {
