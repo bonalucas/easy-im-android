@@ -1,10 +1,12 @@
 package com.easyim.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.easyim.R;
 import com.easyim.adapter.ChatAdapter;
+import com.easyim.client.common.SnowflakeIDGenerator;
 import com.easyim.comm.message.chat.ChatResponseMessage;
 import com.easyim.common.Constants;
 
@@ -39,6 +42,7 @@ public class MeetingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meeting);
 
         // 获取界面元素的引用
+        TextView meetingTheme = findViewById(R.id.textViewMeetingTitle);
         ImageButton buttonExitMeeting = findViewById(R.id.buttonExitMeeting);
         ImageButton buttonUploadFile = findViewById(R.id.buttonUploadFile);
         ImageButton buttonMic = findViewById(R.id.buttonMic);
@@ -50,15 +54,28 @@ public class MeetingActivity extends AppCompatActivity {
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewChat.setAdapter(chatAdapter);
 
-        // 示例添加系统消息
-        ChatResponseMessage systemMessage = new ChatResponseMessage("system", Constants.ChatMessageType.SYSTEM_TYPE, "lucas 创建会议");
-        chatMessages.add(systemMessage);
-        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
+        // 初始化会议界面
+        Intent intent = getIntent();
+        String nickname = intent.getStringExtra("nickname");
+        String theme = intent.getStringExtra("theme");
+        String type = intent.getStringExtra("type");
+        meetingTheme.setText(theme);
+        if ("create".equals(type)) {
+            // 显示创建会议
+            ChatResponseMessage systemMessage = new ChatResponseMessage(SnowflakeIDGenerator.generateID(), "system", Constants.ChatMessageType.SYSTEM_TYPE, nickname + " 创建会议");
+            chatMessages.add(systemMessage);
+            chatAdapter.notifyItemInserted(chatMessages.size() - 1);
+        } else if ("join".equals(type)) {
+            // 显示进入会议
+            ChatResponseMessage systemMessage = new ChatResponseMessage(SnowflakeIDGenerator.generateID(), "system", Constants.ChatMessageType.SYSTEM_TYPE, nickname + " 进入会议");
+            chatMessages.add(systemMessage);
+            chatAdapter.notifyItemInserted(chatMessages.size() - 1);
+        }
 
         // 示例添加用户聊天消息
-        ChatResponseMessage userMessage = new ChatResponseMessage("lucas", Constants.ChatMessageType.TEXT_TYPE, "Hello ...");
-        chatMessages.add(userMessage);
-        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
+//        ChatResponseMessage userMessage = new ChatResponseMessage("lucas", Constants.ChatMessageType.TEXT_TYPE, "Hello ...");
+//        chatMessages.add(userMessage);
+//        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
 
         buttonExitMeeting.setOnClickListener(new View.OnClickListener() {
             @Override

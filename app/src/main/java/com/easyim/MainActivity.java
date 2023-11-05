@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.easyim.activity.MeetingActivity;
 import com.easyim.client.NettyClient;
 import com.easyim.client.common.ClientConfig;
 import com.easyim.client.common.SnowflakeIDGenerator;
@@ -24,8 +26,8 @@ import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
 import com.easyim.event.CEventCenter;
 import com.easyim.event.Events;
 import com.easyim.event.I_CEventListener;
-import com.easyim.service.common.MessageProcessor;
 import com.easyim.service.common.FastUniqueIDGenerator;
+import com.easyim.service.common.MessageProcessor;
 import com.easyim.service.common.ServiceThreadPoolExecutor;
 
 /**
@@ -148,6 +150,12 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 if (obj instanceof CreateMeetingResponseMessage) {
                     CreateMeetingResponseMessage msg = (CreateMeetingResponseMessage) obj;
                     ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, String.format("创建会议成功,会议号为【%s】", msg.getMeetingId()), Toast.LENGTH_SHORT).show());
+                    // 跳转进入会议页面
+                    Intent intent = new Intent(MainActivity.this, MeetingActivity.class);
+                    intent.putExtra("nickname", msg.getNickname());
+                    intent.putExtra("theme", msg.getTheme());
+                    intent.putExtra("type", "create");
+                    startActivity(intent);
                 }
                 break;
             }
@@ -156,6 +164,12 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 if (obj instanceof JoinMeetingResponseMessage) {
                     JoinMeetingResponseMessage msg = (JoinMeetingResponseMessage) obj;
                     ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, String.format("加入会议成功,会议号为【%s】", msg.getMeetingId()), Toast.LENGTH_SHORT).show());
+                    // 跳转进入会议页面
+                    Intent intent = new Intent(MainActivity.this, MeetingActivity.class);
+                    intent.putExtra("nickname", msg.getNickname());
+                    intent.putExtra("theme", msg.getTheme());
+                    intent.putExtra("type", "join");
+                    startActivity(intent);
                 }
                 break;
             }

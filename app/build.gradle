@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 31
 
     testOptions {
         unitTests.returnDefaultValues = true
@@ -11,8 +11,8 @@ android {
 
     defaultConfig {
         applicationId "com.esayim"
-        minSdk 34
-        targetSdk 34
+        minSdk 31
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 

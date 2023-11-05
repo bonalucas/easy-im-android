@@ -1,5 +1,6 @@
 package com.easyim.comm.message.chat;
 
+import com.dyuproject.protostuff.Tag;
 import com.easyim.comm.message.Message;
 import com.easyim.comm.message.MessageTypeConstants;
 
@@ -13,11 +14,13 @@ public class ChatRequestMessage extends Message {
     /**
      * 消息类型
      */
+    @Tag(2)
     private Byte type;
 
     /**
      * 消息内容
      */
+    @Tag(3)
     private String content;
 
     public ChatRequestMessage() {

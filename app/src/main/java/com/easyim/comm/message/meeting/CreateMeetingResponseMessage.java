@@ -1,5 +1,6 @@
 package com.easyim.comm.message.meeting;
 
+import com.dyuproject.protostuff.Tag;
 import com.easyim.comm.message.Message;
 import com.easyim.comm.message.MessageTypeConstants;
 
@@ -13,16 +14,19 @@ public class CreateMeetingResponseMessage extends Message {
     /**
      * 会议ID
      */
+    @Tag(2)
     private String meetingId;
 
     /**
      * 会议主题
      */
+    @Tag(3)
     private String theme;
 
     /**
      * 入会昵称
      */
+    @Tag(4)
     private String nickname;
 
     public CreateMeetingResponseMessage() {

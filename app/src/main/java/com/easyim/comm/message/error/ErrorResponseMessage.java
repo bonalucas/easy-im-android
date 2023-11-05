@@ -1,5 +1,6 @@
 package com.easyim.comm.message.error;
 
+import com.dyuproject.protostuff.Tag;
 import com.easyim.comm.message.Message;
 import com.easyim.comm.message.MessageTypeConstants;
 
@@ -13,6 +14,7 @@ public class ErrorResponseMessage extends Message {
     /**
      * 异常原因
      */
+    @Tag(2)
     private String error;
 
     public ErrorResponseMessage() {

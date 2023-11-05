@@ -1,5 +1,6 @@
 package com.easyim.comm.message.handshake;
 
+import com.dyuproject.protostuff.Tag;
 import com.easyim.comm.message.Message;
 import com.easyim.comm.message.MessageTypeConstants;
 
@@ -13,6 +14,7 @@ public class HandShakeResponseMessage extends Message {
     /**
      * 反馈
      */
+    @Tag(2)
     private Boolean feedback;
 
     public HandShakeResponseMessage() {

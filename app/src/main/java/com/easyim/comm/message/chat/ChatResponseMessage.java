@@ -1,5 +1,6 @@
 package com.easyim.comm.message.chat;
 
+import com.dyuproject.protostuff.Tag;
 import com.easyim.comm.message.Message;
 import com.easyim.comm.message.MessageTypeConstants;
 
@@ -13,16 +14,19 @@ public class ChatResponseMessage extends Message {
     /**
      * 发送消息者昵称
      */
+    @Tag(2)
     private String nickname;
 
     /**
      * 消息类型
      */
+    @Tag(3)
     private Byte type;
 
     /**
      * 消息内容
      */
+    @Tag(4)
     private String content;
 
     public ChatResponseMessage() {
