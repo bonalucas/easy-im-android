@@ -18,4 +18,7 @@ public class Events {
     // 聊天响应事件
     public static final String CHAT_RESPONSE = "chat_response";
 
+    // 文件响应事件
+    public static final String FILE_RESPONSE = "file_response";
+
 }

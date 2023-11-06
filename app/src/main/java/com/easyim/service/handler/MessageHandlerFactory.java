@@ -4,6 +4,7 @@ import com.easyim.comm.message.MessageTypeConstants;
 import com.easyim.service.handler.impl.ChatServiceHandler;
 import com.easyim.service.handler.impl.CreateMeetingServiceHandler;
 import com.easyim.service.handler.impl.ErrorMessageServiceHandler;
+import com.easyim.service.handler.impl.FileServiceHandler;
 import com.easyim.service.handler.impl.JoinMeetingServiceHandler;
 
 import java.util.Map;
@@ -23,6 +24,7 @@ public class MessageHandlerFactory {
         handlerMap.put(MessageTypeConstants.CreateMeetingResponseMessage, new CreateMeetingServiceHandler());
         handlerMap.put(MessageTypeConstants.JoinMeetingResponseMessage, new JoinMeetingServiceHandler());
         handlerMap.put(MessageTypeConstants.ChatResponseMessage, new ChatServiceHandler());
+        handlerMap.put(MessageTypeConstants.FileResponseMessage, new FileServiceHandler());
     }
 
     /**

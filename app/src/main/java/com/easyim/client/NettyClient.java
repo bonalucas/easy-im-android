@@ -175,7 +175,7 @@ public class NettyClient {
             return;
         }
         // 开启消息重发器（延迟 10s 重发消息）
-        if (enabled) {
+        if (enabled && message.getMessageId() != null) {
             messageRetransmissionManager.add(message);
         }
         // 发送消息

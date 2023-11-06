@@ -21,5 +21,7 @@ public interface MessageTypeConstants {
     Byte JoinMeetingResponseMessage = 9;
     Byte ChatRequestMessage = 10;
     Byte ChatResponseMessage = 11;
+    Byte FileRequestMessage = 12;
+    Byte FileResponseMessage = 13;
 
 }
