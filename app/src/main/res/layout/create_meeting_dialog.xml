@@ -33,20 +33,20 @@
         android:id="@+id/editTextMeetingTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="会议主题"
+        android:hint="@string/theme"
         android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/editTextNickName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="入会昵称"
+        android:hint="@string/nickname"
         android:minHeight="48dp" />
 
     <Button
         android:id="@+id/buttonCreateMeetingDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="创建会议" />
+        android:text="@string/create_meeting" />
 
 </LinearLayout>

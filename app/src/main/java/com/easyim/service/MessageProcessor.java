@@ -1,4 +1,4 @@
-package com.easyim.service.common;
+package com.easyim.service;
 
 import android.util.Log;
 

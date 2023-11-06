@@ -1,6 +1,7 @@
 package com.easyim.service.handler;
 
 import com.easyim.comm.message.MessageTypeConstants;
+import com.easyim.service.handler.impl.ChatServiceHandler;
 import com.easyim.service.handler.impl.CreateMeetingServiceHandler;
 import com.easyim.service.handler.impl.ErrorMessageServiceHandler;
 import com.easyim.service.handler.impl.JoinMeetingServiceHandler;
@@ -21,6 +22,7 @@ public class MessageHandlerFactory {
         handlerMap.put(MessageTypeConstants.ErrorResponseMessage, new ErrorMessageServiceHandler());
         handlerMap.put(MessageTypeConstants.CreateMeetingResponseMessage, new CreateMeetingServiceHandler());
         handlerMap.put(MessageTypeConstants.JoinMeetingResponseMessage, new JoinMeetingServiceHandler());
+        handlerMap.put(MessageTypeConstants.ChatResponseMessage, new ChatServiceHandler());
     }
 
     /**

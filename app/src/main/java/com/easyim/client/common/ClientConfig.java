@@ -80,7 +80,7 @@ public class ClientConfig {
     /**
      * 默认消息重发间隔时长
      */
-    public static final int DEFAULT_RESEND_INTERVAL = 15 * 1000;
+    public static final int DEFAULT_RESEND_INTERVAL = 30 * 1000;
 
     /**
      * 默认服务端请求成功状态

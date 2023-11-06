@@ -3,6 +3,7 @@ package com.easyim.client;
 import com.easyim.client.handler.ExceptionHandler;
 import com.easyim.client.handler.HandShakeHandler;
 import com.easyim.client.handler.HeartBeatHandler;
+import com.easyim.client.handler.biz.ChatHandler;
 import com.easyim.client.handler.biz.CreateMeetingHandler;
 import com.easyim.client.handler.biz.JoinMeetingHandler;
 import com.easyim.client.handler.biz.ServerErrorHandler;
@@ -36,6 +37,7 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
         socketChannel.pipeline().addLast(ServerErrorHandler.class.getSimpleName(), ServerErrorHandler.getInstance());
         socketChannel.pipeline().addLast(CreateMeetingHandler.class.getSimpleName(), CreateMeetingHandler.getInstance());
         socketChannel.pipeline().addLast(JoinMeetingHandler.class.getSimpleName(), JoinMeetingHandler.getInstance());
+        socketChannel.pipeline().addLast(ChatHandler.class.getSimpleName(), ChatHandler.getInstance());
         // 添加监控处理器
         socketChannel.pipeline().addLast(ExceptionHandler.class.getSimpleName(), ExceptionHandler.getInstance());
     }

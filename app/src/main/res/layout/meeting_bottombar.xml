@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:hint="输入消息"
+        android:hint="@string/input_message"
         android:minHeight="48dp" />
 
     <!-- 发送按钮 -->
@@ -20,7 +20,7 @@
         android:id="@+id/buttonSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="发送"
+        android:text="@string/send"
         android:layout_marginStart="8dp" />
 
 </LinearLayout>

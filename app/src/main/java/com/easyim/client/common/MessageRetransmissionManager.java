@@ -51,7 +51,7 @@ public class MessageRetransmissionManager {
      * @param messageId 消息ID
      */
     public void remove(long messageId) {
-        if (messageId == 0L) {
+        if (messageId == 0L && !messageTimeoutMap.containsKey(messageId)) {
             return;
         }
         MessageTimer timer = messageTimeoutMap.remove(messageId);

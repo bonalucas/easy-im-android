@@ -2,7 +2,7 @@ package com.easyim.client.handler.biz;
 
 import com.easyim.client.NettyClient;
 import com.easyim.comm.message.error.ErrorResponseMessage;
-import com.easyim.service.common.MessageProcessor;
+import com.easyim.service.MessageProcessor;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

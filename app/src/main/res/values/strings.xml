@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">easy-im-client</string>
+    <string name="meetingId">会议号</string>
+    <string name="nickname">入会昵称</string>
     <string name="enter_meeting">加入会议</string>
     <string name="create_meeting">创建会议</string>
+    <string name="exit_meeting">退出会议</string>
+    <string name="theme">会议主题</string>
+    <string name="upload_file">上传文件</string>
+    <string name="mic">麦克风</string>
+    <string name="screen">屏幕共享</string>
+    <string name="input_message">输入消息</string>
+    <string name="send">发送</string>
 </resources>

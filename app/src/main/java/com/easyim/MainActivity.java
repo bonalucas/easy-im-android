@@ -23,12 +23,12 @@ import com.easyim.comm.message.meeting.CreateMeetingRequestMessage;
 import com.easyim.comm.message.meeting.CreateMeetingResponseMessage;
 import com.easyim.comm.message.meeting.JoinMeetingRequestMessage;
 import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
+import com.easyim.common.FastUniqueIDGenerator;
 import com.easyim.event.CEventCenter;
 import com.easyim.event.Events;
 import com.easyim.event.I_CEventListener;
-import com.easyim.service.common.FastUniqueIDGenerator;
-import com.easyim.service.common.MessageProcessor;
-import com.easyim.service.common.ServiceThreadPoolExecutor;
+import com.easyim.service.MessageProcessor;
+import com.easyim.service.ServiceThreadPoolExecutor;
 
 /**
  * 首页活动
@@ -41,11 +41,13 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // 初始化 Netty 客户端
         NettyClient nettyClient = NettyClient.getInstance();
         nettyClient.init(ClientConfig.APP_STATUS_BACKGROUND);
-        CEventCenter.registerEventListener(this, new String[]{ Events.CREATE_MEETING, Events.SERVER_ERROR, Events.JOIN_MEETING });
-
+        // 注册监听事件
+        String[] interest = { Events.CREATE_MEETING, Events.SERVER_ERROR, Events.JOIN_MEETING };
+        CEventCenter.registerEventListener(this, interest);
+        // 获取界面元素的引用
         Button buttonJoinMeeting = findViewById(R.id.buttonJoinMeeting);
         Button buttonCreateMeeting = findViewById(R.id.buttonCreateMeeting);
 
