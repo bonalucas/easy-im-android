@@ -32,6 +32,8 @@ import com.easyim.comm.message.chat.ChatResponseMessage;
 import com.easyim.comm.message.file.FileRequestMessage;
 import com.easyim.comm.message.file.FileResponseMessage;
 import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
+import com.easyim.comm.message.screen.ShareScreenRequestMessage;
+import com.easyim.comm.message.screen.ShareScreenResponseMessage;
 import com.easyim.common.Constants;
 import com.easyim.event.CEventCenter;
 import com.easyim.event.Events;
@@ -59,13 +61,14 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
      */
     private static final int FILE_PICKER_REQUEST_CODE = 679;
 
-    // 用于跟踪语音是否开启
-    private boolean isMicOn = false;
-
-    // 聊天记录消息列表
+    /**
+     * 聊天记录消息列表
+     */
     private final List<ChatResponseMessage> chatMessages = new LinkedList<>();
 
-    // 聊天适配器
+    /**
+     * 聊天适配器
+     */
     private ChatAdapter chatAdapter;
 
     @Override
@@ -73,7 +76,7 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting);
         // 注册监听事件
-        String[] interest = { Events.SERVER_ERROR, Events.JOIN_MEETING, Events.CHAT_RESPONSE, Events.FILE_RESPONSE };
+        String[] interest = { Events.SERVER_ERROR, Events.JOIN_MEETING, Events.CHAT_RESPONSE, Events.FILE_RESPONSE, Events.ShareScreen_RESPONSE };
         CEventCenter.registerEventListener(this, interest);
         // 获取界面元素的引用
         TextView meetingTheme = findViewById(R.id.textViewMeetingTitle);
@@ -108,8 +111,8 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         buttonExitMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 处理退出会议逻辑
-                finish(); // 关闭当前会议页面
+                // 关闭当前会议页面
+                finish();
             }
         });
 
@@ -124,8 +127,8 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         buttonScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 处理屏幕共享逻辑
-                toggleScreen();
+                // 发送屏幕共享消息
+                MessageProcessor.getInstance().sendMessage(new ShareScreenRequestMessage(SnowflakeIDGenerator.generateID()));
             }
         });
 
@@ -139,19 +142,9 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
 
     }
 
-    private void toggleScreen() {
-//        ImageButton buttonMic = findViewById(R.id.buttonScreen);
-//        if (isMicOn) {
-//            // 关闭语音
-//            buttonMic.setImageResource(R.drawable.ic_voice_off);
-//            isMicOn = false;
-//        } else {
-//            // 开启语音
-//            buttonMic.setImageResource(R.drawable.ic_voice_on);
-//            isMicOn = true;
-//        }
-    }
-
+    /**
+     * 打开文件选择器
+     */
     private void openFilePicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
@@ -179,7 +172,6 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -201,7 +193,6 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
             }
         }
     }
-
 
     @Override
     public void onCEvent(String topic, int msgCode, int resultCode, Object obj) {
@@ -241,6 +232,23 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    });
+                }
+                break;
+            }
+
+            case Events.ShareScreen_RESPONSE: {
+                if (obj instanceof ShareScreenResponseMessage) {
+                    // 文件消息弹出框渲染
+                    ServiceThreadPoolExecutor.runOnMainThread(() -> {
+                        ShareScreenResponseMessage msg = (ShareScreenResponseMessage) obj;
+                        Toast.makeText(MeetingActivity.this, msg.getNickname() + "发起屏幕共享", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MeetingActivity.this, ScreenShareActivity.class);
+                        intent.putExtra("theme", msg.getTheme());
+                        intent.putExtra("nickname", msg.getNickname());
+                        intent.putExtra("meetingId", msg.getMeetingId());
+                        intent.putExtra("isShared", msg.isShared());
+                        startActivity(intent);
                     });
                 }
                 break;
@@ -306,6 +314,9 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         return fileName;
     }
 
+    /**
+     * 弹出文件展示对话框
+     */
     private void showFileDetailsDialog(Context context, FileResponseMessage msg) throws IOException {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         // 获取对话框的布局

@@ -23,5 +23,7 @@ public interface MessageTypeConstants {
     Byte ChatResponseMessage = 11;
     Byte FileRequestMessage = 12;
     Byte FileResponseMessage = 13;
+    Byte ShareScreenRequestMessage = 14;
+    Byte ShareScreenResponseMessage = 15;
 
 }

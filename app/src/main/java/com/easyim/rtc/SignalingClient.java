@@ -36,11 +36,6 @@ public class SignalingClient {
     private static final String socketUrl = "http://100.2.135.237:9075";
 
     /**
-     * 房间名
-     */
-    private static final String room = "EasyIM";
-
-    /**
      * 客户端套接字（用于通信）
      */
     private Socket socket;
@@ -62,14 +57,12 @@ public class SignalingClient {
     /**
      * 初始化
      */
-    public void init(Callback callback) {
+    public void init(Callback callback, String room) {
         try {
             // 创建 WebSocket 连接并连接
             socket = IO.socket(socketUrl);
 
-            socket.on("connect_error", error -> {
-                Log.e(TAG, String.format("连接失败: %s", error));
-            });
+            socket.on("connect_error", error -> Log.e(TAG, String.format("连接失败: %s", error)));
 
             socket.on("connect", arg -> Log.d(TAG, "与信令服务器连接成功"));
 

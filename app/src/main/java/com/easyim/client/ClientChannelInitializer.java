@@ -8,6 +8,7 @@ import com.easyim.client.handler.biz.CreateMeetingHandler;
 import com.easyim.client.handler.biz.FileHandler;
 import com.easyim.client.handler.biz.JoinMeetingHandler;
 import com.easyim.client.handler.biz.ServerErrorHandler;
+import com.easyim.client.handler.biz.ShareScreenHandler;
 import com.easyim.comm.protocol.MessageCodec;
 import com.easyim.comm.protocol.ProtocolFrameDecoder;
 
@@ -40,6 +41,7 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
         socketChannel.pipeline().addLast(JoinMeetingHandler.class.getSimpleName(), JoinMeetingHandler.getInstance());
         socketChannel.pipeline().addLast(ChatHandler.class.getSimpleName(), ChatHandler.getInstance());
         socketChannel.pipeline().addLast(FileHandler.class.getSimpleName(), FileHandler.getInstance());
+        socketChannel.pipeline().addLast(ShareScreenHandler.class.getSimpleName(), ShareScreenHandler.getInstance());
         // 添加监控处理器
         socketChannel.pipeline().addLast(ExceptionHandler.class.getSimpleName(), ExceptionHandler.getInstance());
     }

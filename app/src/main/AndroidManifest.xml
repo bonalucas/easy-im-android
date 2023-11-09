@@ -32,6 +32,13 @@
             android:label="@string/empty_string"
             android:theme="@style/Theme.Easyimclient">
         </activity>
+        <activity android:name=".activity.ScreenShareActivity"
+            android:label="@string/empty_string"
+            android:theme="@style/Theme.Easyimclient">
+        </activity>
+        <service android:name=".rtc.ScreenRecordingService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.easyim.fileprovider"

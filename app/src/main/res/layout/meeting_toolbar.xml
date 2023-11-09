@@ -39,7 +39,7 @@
         android:minHeight="48dp"
         android:src="@drawable/ic_upload" />
 
-    <!-- 右侧的麦克风按钮 -->
+    <!-- 右侧的屏幕共享按钮 -->
     <ImageButton
         android:id="@+id/buttonScreen"
         android:layout_width="wrap_content"

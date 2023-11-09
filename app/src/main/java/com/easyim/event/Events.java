@@ -21,4 +21,7 @@ public class Events {
     // 文件响应事件
     public static final String FILE_RESPONSE = "file_response";
 
+    // 屏幕共享响应事件
+    public static final String ShareScreen_RESPONSE = "share_screen_response";
+
 }

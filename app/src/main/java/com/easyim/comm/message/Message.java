@@ -14,6 +14,8 @@ import com.easyim.comm.message.meeting.CreateMeetingRequestMessage;
 import com.easyim.comm.message.meeting.CreateMeetingResponseMessage;
 import com.easyim.comm.message.meeting.JoinMeetingRequestMessage;
 import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
+import com.easyim.comm.message.screen.ShareScreenRequestMessage;
+import com.easyim.comm.message.screen.ShareScreenResponseMessage;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,6 +55,8 @@ public abstract class Message {
         MAP.put(MessageTypeConstants.ChatResponseMessage, ChatResponseMessage.class);
         MAP.put(MessageTypeConstants.FileRequestMessage, FileRequestMessage.class);
         MAP.put(MessageTypeConstants.FileResponseMessage, FileResponseMessage.class);
+        MAP.put(MessageTypeConstants.ShareScreenRequestMessage, ShareScreenRequestMessage.class);
+        MAP.put(MessageTypeConstants.ShareScreenResponseMessage, ShareScreenResponseMessage.class);
     }
 
     public Long getMessageId() {

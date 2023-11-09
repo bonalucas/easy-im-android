@@ -12,4 +12,5 @@
     <string name="screen">屏幕共享</string>
     <string name="input_message">输入消息</string>
     <string name="send">发送</string>
+    <string name="end_share">结束共享</string>
 </resources>
