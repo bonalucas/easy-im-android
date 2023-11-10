@@ -24,4 +24,7 @@ public class Events {
     // 屏幕共享响应事件
     public static final String ShareScreen_RESPONSE = "share_screen_response";
 
+    // 退出会议响应事件
+    public static final String LEAVE_RESPONSE = "leave_response";
+
 }

@@ -14,6 +14,8 @@ import com.easyim.comm.message.meeting.CreateMeetingRequestMessage;
 import com.easyim.comm.message.meeting.CreateMeetingResponseMessage;
 import com.easyim.comm.message.meeting.JoinMeetingRequestMessage;
 import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
+import com.easyim.comm.message.meeting.LeaveMeetingRequestMessage;
+import com.easyim.comm.message.meeting.LeaveMeetingResponseMessage;
 import com.easyim.comm.message.screen.ShareScreenRequestMessage;
 import com.easyim.comm.message.screen.ShareScreenResponseMessage;
 
@@ -57,6 +59,8 @@ public abstract class Message {
         MAP.put(MessageTypeConstants.FileResponseMessage, FileResponseMessage.class);
         MAP.put(MessageTypeConstants.ShareScreenRequestMessage, ShareScreenRequestMessage.class);
         MAP.put(MessageTypeConstants.ShareScreenResponseMessage, ShareScreenResponseMessage.class);
+        MAP.put(MessageTypeConstants.LeaveMeetingRequestMessage, LeaveMeetingRequestMessage.class);
+        MAP.put(MessageTypeConstants.LeaveMeetingResponseMessage, LeaveMeetingResponseMessage.class);
     }
 
     public Long getMessageId() {

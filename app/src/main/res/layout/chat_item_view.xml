@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="8dp">
 
     <!-- 系统消息文本视图 -->
@@ -15,24 +16,15 @@
         android:padding="8dp"
         android:visibility="gone" />
 
-    <!-- 用户聊天消息的布局 -->
-    <LinearLayout
-        android:id="@+id/layoutUserMessage"
+    <!-- 用户聊天消息文本视图 -->
+    <TextView
+        android:id="@+id/textViewUserMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <!-- 用户聊天消息文本视图 -->
-        <TextView
-            android:id="@+id/textViewUserMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="#000"
-            android:background="#eee"
-            android:padding="8dp" />
-
-    </LinearLayout>
+        android:textSize="15sp"
+        android:textColor="#000"
+        android:background="#eee"
+        android:padding="8dp"
+        android:visibility="gone" />
 
 </LinearLayout>

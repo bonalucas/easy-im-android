@@ -5,10 +5,13 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.IceCandidate;
+import org.webrtc.PeerConnection;
 import org.webrtc.SessionDescription;
 
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -39,6 +42,11 @@ public class SignalingClient {
      * 客户端套接字（用于通信）
      */
     private Socket socket;
+
+    /**
+     * 连接集合
+     */
+    public static final Map<String, PeerConnection> peerConnectionMap = new ConcurrentHashMap<>();
 
     /**
      * 采用双重锁检查方式获取单例

@@ -47,9 +47,7 @@ import org.webrtc.VideoTrack;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 屏幕录制服务类
@@ -69,8 +67,6 @@ public class ScreenRecordingService extends Service implements SignalingClient.C
     private final EglBase.Context eglBaseContext = EglBase.create().getEglBaseContext();
 
     private PeerConnectionFactory peerConnectionFactory;
-
-    private final Map<String, PeerConnection> peerConnectionMap = new HashMap<>();
 
     private MediaStream mediaStream;
 
@@ -222,7 +218,7 @@ public class ScreenRecordingService extends Service implements SignalingClient.C
      * 获取 PeerConnection 对象
      */
     private synchronized PeerConnection getOrCreatePeerConnection(String socketId) {
-        PeerConnection peerConnection = peerConnectionMap.get(socketId);
+        PeerConnection peerConnection = SignalingClient.peerConnectionMap.get(socketId);
         if(peerConnection != null) {
             return peerConnection;
         }
@@ -237,8 +233,8 @@ public class ScreenRecordingService extends Service implements SignalingClient.C
                 super.onAddStream(mediaStream);
             }
         });
-        peerConnection.addStream(mediaStream);
-        peerConnectionMap.put(socketId, peerConnection);
+        if (peerConnection != null) peerConnection.addStream(mediaStream);
+        SignalingClient.peerConnectionMap.put(socketId, peerConnection);
         return peerConnection;
     }
 
@@ -266,7 +262,7 @@ public class ScreenRecordingService extends Service implements SignalingClient.C
                 @Override
                 public void onCreateSuccess(SessionDescription sdp) {
                     super.onCreateSuccess(sdp);
-                    peerConnectionMap.get(socketId).setLocalDescription(new SdpAdapter("setLocalSdp:" + socketId), sdp);
+                    SignalingClient.peerConnectionMap.get(socketId).setLocalDescription(new SdpAdapter("setLocalSdp:" + socketId), sdp);
                     SignalingClient.getInstance().sendSessionDescription(sdp, socketId);
                 }
             }, new MediaConstraints());

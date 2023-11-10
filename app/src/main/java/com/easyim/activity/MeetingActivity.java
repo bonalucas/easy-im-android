@@ -24,6 +24,7 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.easyim.MainActivity;
 import com.easyim.R;
 import com.easyim.adapter.ChatAdapter;
 import com.easyim.client.common.SnowflakeIDGenerator;
@@ -32,6 +33,8 @@ import com.easyim.comm.message.chat.ChatResponseMessage;
 import com.easyim.comm.message.file.FileRequestMessage;
 import com.easyim.comm.message.file.FileResponseMessage;
 import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
+import com.easyim.comm.message.meeting.LeaveMeetingRequestMessage;
+import com.easyim.comm.message.meeting.LeaveMeetingResponseMessage;
 import com.easyim.comm.message.screen.ShareScreenRequestMessage;
 import com.easyim.comm.message.screen.ShareScreenResponseMessage;
 import com.easyim.common.Constants;
@@ -71,12 +74,16 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
      */
     private ChatAdapter chatAdapter;
 
+    /**
+     * 监听事件
+     */
+    private final String[] interest = { Events.SERVER_ERROR, Events.JOIN_MEETING, Events.CHAT_RESPONSE, Events.FILE_RESPONSE, Events.ShareScreen_RESPONSE, Events.LEAVE_RESPONSE };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting);
         // 注册监听事件
-        String[] interest = { Events.SERVER_ERROR, Events.JOIN_MEETING, Events.CHAT_RESPONSE, Events.FILE_RESPONSE, Events.ShareScreen_RESPONSE };
         CEventCenter.registerEventListener(this, interest);
         // 获取界面元素的引用
         TextView meetingTheme = findViewById(R.id.textViewMeetingTitle);
@@ -111,8 +118,8 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         buttonExitMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 关闭当前会议页面
-                finish();
+                // 退出会议
+                exitMeeting();
             }
         });
 
@@ -140,6 +147,18 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
             }
         });
 
+    }
+
+    /**
+     * 退出会议
+     */
+    private void exitMeeting() {
+        // 通知会议其他人并退出会议
+        MessageProcessor.getInstance().sendMessage(new LeaveMeetingRequestMessage(SnowflakeIDGenerator.generateID()));
+        // 注销监听器
+        CEventCenter.onBindEvent(false, this, interest);
+        // 跳转主页
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     /**
@@ -243,12 +262,31 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
                     ServiceThreadPoolExecutor.runOnMainThread(() -> {
                         ShareScreenResponseMessage msg = (ShareScreenResponseMessage) obj;
                         Toast.makeText(MeetingActivity.this, msg.getNickname() + "发起屏幕共享", Toast.LENGTH_SHORT).show();
+                        // 注销监听事件
+                        CEventCenter.onBindEvent(false, this, interest);
+                        // 跳转页面
                         Intent intent = new Intent(MeetingActivity.this, ScreenShareActivity.class);
                         intent.putExtra("theme", msg.getTheme());
                         intent.putExtra("nickname", msg.getNickname());
                         intent.putExtra("meetingId", msg.getMeetingId());
                         intent.putExtra("isShared", msg.isShared());
                         startActivity(intent);
+                    });
+                }
+                break;
+            }
+
+            case Events.LEAVE_RESPONSE: {
+                if (obj instanceof LeaveMeetingResponseMessage) {
+                    // 文件消息弹出框渲染
+                    ServiceThreadPoolExecutor.runOnMainThread(() -> {
+                        LeaveMeetingResponseMessage msg = (LeaveMeetingResponseMessage) obj;
+                        // 渲染系统退出会议提示
+                        ServiceThreadPoolExecutor.runOnMainThread(() -> {
+                            ChatResponseMessage systemMessage = new ChatResponseMessage(SnowflakeIDGenerator.generateID(), "system", Constants.ChatMessageType.SYSTEM_TYPE, msg.getNickname() + " 退出会议");
+                            chatMessages.add(systemMessage);
+                            chatAdapter.notifyItemInserted(chatMessages.size() - 1);
+                        });
                     });
                 }
                 break;

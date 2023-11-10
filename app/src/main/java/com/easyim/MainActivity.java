@@ -37,6 +37,11 @@ import com.easyim.service.ServiceThreadPoolExecutor;
  */
 public class MainActivity extends AppCompatActivity implements I_CEventListener {
 
+    /**
+     * 监听事件
+     */
+    private final String[] interest = { Events.CREATE_MEETING, Events.SERVER_ERROR, Events.JOIN_MEETING };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +50,7 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
         NettyClient nettyClient = NettyClient.getInstance();
         nettyClient.init(ClientConfig.APP_STATUS_BACKGROUND);
         // 注册监听事件
-        String[] interest = { Events.CREATE_MEETING, Events.SERVER_ERROR, Events.JOIN_MEETING };
-        CEventCenter.registerEventListener(this, interest);
+        CEventCenter.onBindEvent(true, this, interest);
         // 获取界面元素的引用
         Button buttonJoinMeeting = findViewById(R.id.buttonJoinMeeting);
         Button buttonCreateMeeting = findViewById(R.id.buttonCreateMeeting);
@@ -152,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 if (obj instanceof CreateMeetingResponseMessage) {
                     CreateMeetingResponseMessage msg = (CreateMeetingResponseMessage) obj;
                     ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, String.format("创建会议成功,会议号为【%s】", msg.getMeetingId()), Toast.LENGTH_SHORT).show());
+                    // 注销监听器
+                    CEventCenter.onBindEvent(false, this, interest);
                     // 跳转进入会议页面
                     Intent intent = new Intent(MainActivity.this, MeetingActivity.class);
                     intent.putExtra("nickname", msg.getNickname());
@@ -166,6 +172,8 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 if (obj instanceof JoinMeetingResponseMessage) {
                     JoinMeetingResponseMessage msg = (JoinMeetingResponseMessage) obj;
                     ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(MainActivity.this, String.format("加入会议成功,会议号为【%s】", msg.getMeetingId()), Toast.LENGTH_SHORT).show());
+                    // 注销监听器
+                    CEventCenter.onBindEvent(false, this, interest);
                     // 跳转进入会议页面
                     Intent intent = new Intent(MainActivity.this, MeetingActivity.class);
                     intent.putExtra("nickname", msg.getNickname());

@@ -3,7 +3,6 @@ package com.easyim.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,12 +40,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             // 系统消息的渲染
             holder.systemMessageTextView.setText(message.getContent());
             holder.systemMessageTextView.setVisibility(View.VISIBLE);
-            holder.userMessageLayout.setVisibility(View.GONE);
+            holder.userMessageTextView.setVisibility(View.GONE);
         } else if (message.getType().equals(Constants.ChatMessageType.TEXT_TYPE)) {
             // 用户聊天消息的渲染
             holder.userMessageTextView.setText(message.getNickname() + ": " + message.getContent());
+            holder.userMessageTextView.setVisibility(View.VISIBLE);
             holder.systemMessageTextView.setVisibility(View.GONE);
-            holder.userMessageLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -58,13 +57,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView systemMessageTextView;
-        LinearLayout userMessageLayout;
         TextView userMessageTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             systemMessageTextView = itemView.findViewById(R.id.textViewSystemMessage);
-            userMessageLayout = itemView.findViewById(R.id.layoutUserMessage);
             userMessageTextView = itemView.findViewById(R.id.textViewUserMessage);
         }
 

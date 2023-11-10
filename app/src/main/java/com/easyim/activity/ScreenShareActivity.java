@@ -37,9 +37,7 @@ import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoTrack;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ScreenShareActivity extends AppCompatActivity implements SignalingClient.Callback {
 
@@ -67,11 +65,6 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
      * 连接工厂
      */
     private PeerConnectionFactory peerConnectionFactory;
-
-    /**
-     * 连接集合
-     */
-    private final Map<String, PeerConnection> peerConnectionMap = new HashMap<>();
 
     /**
      * 媒体流渲染上下文
@@ -201,7 +194,7 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
      * 获取 PeerConnection 对象
      */
     private synchronized PeerConnection getOrCreatePeerConnection(String socketId) {
-        PeerConnection peerConnection = peerConnectionMap.get(socketId);
+        PeerConnection peerConnection = SignalingClient.peerConnectionMap.get(socketId);
         if(peerConnection != null) {
             return peerConnection;
         }
@@ -216,10 +209,11 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
                 super.onAddStream(mediaStream);
                 // 显示远端屏幕视频流
                 VideoTrack videoTrack = mediaStream.videoTracks.get(0);
-                videoTrack.addSink(mediaStreamView);
+                Log.d("test", String.format("videoTrack：%s", videoTrack));
+                runOnUiThread(() -> videoTrack.addSink(mediaStreamView));
             }
         });
-        peerConnectionMap.put(socketId, peerConnection);
+        SignalingClient.peerConnectionMap.put(socketId, peerConnection);
         return peerConnection;
     }
 
@@ -247,7 +241,7 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
                 @Override
                 public void onCreateSuccess(SessionDescription sdp) {
                     super.onCreateSuccess(sdp);
-                    peerConnectionMap.get(socketId).setLocalDescription(new SdpAdapter("setLocalSdp:" + socketId), sdp);
+                    SignalingClient.peerConnectionMap.get(socketId).setLocalDescription(new SdpAdapter("setLocalSdp:" + socketId), sdp);
                     SignalingClient.getInstance().sendSessionDescription(sdp, socketId);
                 }
             }, new MediaConstraints());
