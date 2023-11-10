@@ -24,7 +24,6 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.easyim.MainActivity;
 import com.easyim.R;
 import com.easyim.adapter.ChatAdapter;
 import com.easyim.client.common.SnowflakeIDGenerator;
@@ -154,11 +153,10 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
      */
     private void exitMeeting() {
         // 通知会议其他人并退出会议
-        MessageProcessor.getInstance().sendMessage(new LeaveMeetingRequestMessage(SnowflakeIDGenerator.generateID()));
-        // 注销监听器
-        CEventCenter.onBindEvent(false, this, interest);
-        // 跳转主页
-        startActivity(new Intent(this, MainActivity.class));
+        MessageProcessor.getInstance().sendMessage(new LeaveMeetingRequestMessage());
+        // 结束当前页面
+        setResult(RESULT_OK, new Intent());
+        finish();
     }
 
     /**

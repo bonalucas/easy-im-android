@@ -38,6 +38,11 @@ import com.easyim.service.ServiceThreadPoolExecutor;
 public class MainActivity extends AppCompatActivity implements I_CEventListener {
 
     /**
+     * 退出会议标识
+     */
+    private static final int LEAVE_MEETING_CODE = 606;
+
+    /**
      * 监听事件
      */
     private final String[] interest = { Events.CREATE_MEETING, Events.SERVER_ERROR, Events.JOIN_MEETING };
@@ -70,6 +75,15 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 openCreateMeetingDialog();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LEAVE_MEETING_CODE && resultCode == RESULT_OK) {
+            CEventCenter.onBindEvent(true, this, interest);
+        }
     }
 
     private void openCreateMeetingDialog() {
@@ -163,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                     intent.putExtra("nickname", msg.getNickname());
                     intent.putExtra("theme", msg.getTheme());
                     intent.putExtra("type", "create");
-                    startActivity(intent);
+                    startActivityForResult(intent, LEAVE_MEETING_CODE);
                 }
                 break;
             }
@@ -179,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                     intent.putExtra("nickname", msg.getNickname());
                     intent.putExtra("theme", msg.getTheme());
                     intent.putExtra("type", "join");
-                    startActivity(intent);
+                    startActivityForResult(intent, LEAVE_MEETING_CODE);
                 }
                 break;
             }

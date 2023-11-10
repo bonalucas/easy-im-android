@@ -10,13 +10,6 @@ import com.easyim.comm.message.MessageTypeConstants;
  */
 public class LeaveMeetingRequestMessage extends Message {
 
-    public LeaveMeetingRequestMessage() {
-    }
-
-    public LeaveMeetingRequestMessage(long messageId) {
-        super.setMessageId(messageId);
-    }
-
     @Override
     public Byte getConstant() {
         return MessageTypeConstants.LeaveMeetingRequestMessage;
