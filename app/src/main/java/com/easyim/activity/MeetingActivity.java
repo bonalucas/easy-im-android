@@ -34,7 +34,6 @@ import com.easyim.comm.message.file.FileResponseMessage;
 import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
 import com.easyim.comm.message.meeting.LeaveMeetingRequestMessage;
 import com.easyim.comm.message.meeting.LeaveMeetingResponseMessage;
-import com.easyim.comm.message.screen.ShareScreenRequestMessage;
 import com.easyim.comm.message.screen.ShareScreenResponseMessage;
 import com.easyim.common.Constants;
 import com.easyim.event.CEventCenter;
@@ -99,6 +98,7 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         Intent intent = getIntent();
         String nickname = intent.getStringExtra("nickname");
         String theme = intent.getStringExtra("theme");
+        String meetingId = intent.getStringExtra("meetingId");
         String type = intent.getStringExtra("type");
         meetingTheme.setText(theme);
         if ("create".equals(type)) {
@@ -133,8 +133,8 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         buttonScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 发送屏幕共享消息
-                MessageProcessor.getInstance().sendMessage(new ShareScreenRequestMessage(SnowflakeIDGenerator.generateID()));
+                // 处理发起屏幕共享逻辑
+                jumpScreenSharing(theme, meetingId);
             }
         });
 
@@ -146,6 +146,17 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
             }
         });
 
+    }
+
+    /**
+     * 跳转到屏幕共享发起页面
+     */
+    private void jumpScreenSharing(String theme, String meetingId) {
+        // 跳转到发起屏幕共享页面
+        Intent intent = new Intent(MeetingActivity.this, ScreenSharingActivity.class);
+        intent.putExtra("theme", theme);
+        intent.putExtra("meetingId", meetingId);
+        startActivity(intent);
     }
 
     /**
@@ -260,14 +271,10 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
                     ServiceThreadPoolExecutor.runOnMainThread(() -> {
                         ShareScreenResponseMessage msg = (ShareScreenResponseMessage) obj;
                         Toast.makeText(MeetingActivity.this, msg.getNickname() + "发起屏幕共享", Toast.LENGTH_SHORT).show();
-                        // 注销监听事件
-                        CEventCenter.onBindEvent(false, this, interest);
-                        // 跳转页面
+                        // 跳转接收屏幕共享页面
                         Intent intent = new Intent(MeetingActivity.this, ScreenShareActivity.class);
                         intent.putExtra("theme", msg.getTheme());
-                        intent.putExtra("nickname", msg.getNickname());
                         intent.putExtra("meetingId", msg.getMeetingId());
-                        intent.putExtra("isShared", msg.isShared());
                         startActivity(intent);
                     });
                 }

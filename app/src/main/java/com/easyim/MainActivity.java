@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                     Intent intent = new Intent(MainActivity.this, MeetingActivity.class);
                     intent.putExtra("nickname", msg.getNickname());
                     intent.putExtra("theme", msg.getTheme());
+                    intent.putExtra("meetingId", msg.getMeetingId());
                     intent.putExtra("type", "create");
                     startActivityForResult(intent, LEAVE_MEETING_CODE);
                 }
@@ -192,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                     Intent intent = new Intent(MainActivity.this, MeetingActivity.class);
                     intent.putExtra("nickname", msg.getNickname());
                     intent.putExtra("theme", msg.getTheme());
+                    intent.putExtra("meetingId", msg.getMeetingId());
                     intent.putExtra("type", "join");
                     startActivityForResult(intent, LEAVE_MEETING_CODE);
                 }

@@ -1,6 +1,5 @@
 package com.easyim.client.handler.biz;
 
-import com.easyim.client.NettyClient;
 import com.easyim.comm.message.screen.ShareScreenResponseMessage;
 import com.easyim.service.MessageProcessor;
 
@@ -26,8 +25,6 @@ public class ShareScreenHandler extends SimpleChannelInboundHandler<ShareScreenR
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ShareScreenResponseMessage msg) throws Exception {
-        // 关闭消息重发
-        NettyClient.getInstance().getMessageRetransmissionManager().remove(msg.getMessageId());
         // 回调消息到应用层
         MessageProcessor.getInstance().receiveMessage(msg);
     }

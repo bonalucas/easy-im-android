@@ -1,25 +1,16 @@
 package com.easyim.activity;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.easyim.R;
 import com.easyim.rtc.PeerConnectionAdapter;
-import com.easyim.rtc.ScreenRecordingService;
 import com.easyim.rtc.SdpAdapter;
 import com.easyim.rtc.SignalingClient;
 
@@ -37,29 +28,21 @@ import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoTrack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * 屏幕共享活动
+ *
+ * @author 单程车票
+ */
 public class ScreenShareActivity extends AppCompatActivity implements SignalingClient.Callback {
 
     /**
      * 日志标识
      */
     private static final String TAG = ScreenShareActivity.class.getSimpleName();
-
-    /**
-     * 发起者标识
-     */
-    private boolean isShared;
-
-    /**
-     * 麦克风权限请求码
-     */
-    private static final int RECORD_AUDIO_REQUEST_CODE = 1001;
-
-    /**
-     * 屏幕录制权限请求码
-     */
-    private static final int SCREEN_RECORD_REQUEST_CODE  = 1002;
 
     /**
      * 连接工厂
@@ -72,11 +55,6 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
     private final EglBase.Context eglBaseContext = EglBase.create().getEglBaseContext();
 
     /**
-     * 本地媒体流
-     */
-    private MediaStream mediaStream;
-
-    /**
      * ICE服务列表
      */
     private List<PeerConnection.IceServer> iceServers;
@@ -87,9 +65,9 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
     private SurfaceViewRenderer mediaStreamView;
 
     /**
-     * 会议号
+     * 连接集合
      */
-    private String meetingId;
+    private final Map<String, PeerConnection> peerConnectionMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +77,6 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
         iceServers = new ArrayList<>();
         iceServers.add(PeerConnection.IceServer.builder("stun:stun.l.google.com:19302").createIceServer());
         initWebRTC();
-        mediaStream = peerConnectionFactory.createLocalMediaStream("mediaStream");
         // 获取界面元素
         ImageButton endShareButton = findViewById(R.id.endShareButton);
         TextView meetingTheme = findViewById(R.id.meetingTitle);
@@ -108,71 +85,23 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
         mediaStreamView.init(eglBaseContext, null);
         // 初始化屏幕共享页面
         Intent intent = getIntent();
-        meetingId = intent.getStringExtra("meetingId");
-        isShared = intent.getBooleanExtra("isShared", false);
+        String meetingId = intent.getStringExtra("meetingId");
         String theme = intent.getStringExtra("theme");
         meetingTheme.setText(theme);
 
-        // 判断是否是发起者从而进行权限授予
-        if (isShared) {
-            // 获取麦克风权限
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // 请求麦克风权限
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
-            } else {
-                // 直接请求屏幕录制权限
-                requestScreenRecordPermission();
-            }
-        } else {
-            SignalingClient.getInstance().init(this, meetingId);
-        }
+        // 连接信令服务器
+        SignalingClient.getInstance().init(this, meetingId);
 
         endShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "退出会议并断开信令服务器连接");
+                Log.d(TAG, "退出屏幕共享并断开信令服务器连接");
+                // 断开信令服务器连接
                 SignalingClient.getInstance().destroy();
+                // 结束页面返回会议页面
+                finish();
             }
         });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == RECORD_AUDIO_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 获得麦克风权限后请求屏幕录制权限
-                requestScreenRecordPermission();
-            } else {
-                Toast.makeText(ScreenShareActivity.this, "用户拒绝开启麦克风，无法进行语音聊天", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SCREEN_RECORD_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Intent serviceIntent = new Intent(this, ScreenRecordingService.class);
-                serviceIntent.putExtra("resultCode", resultCode);
-                serviceIntent.putExtra("data", data);
-                serviceIntent.putExtra("meetingId", meetingId);
-                startForegroundService(serviceIntent);
-            } else {
-                Toast.makeText(ScreenShareActivity.this, "用户拒绝开启屏幕录制，无法进行屏幕共享", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    /**
-     * 请求屏幕录制权限
-     */
-    private void requestScreenRecordPermission() {
-        MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        Intent permissionIntent = projectionManager.createScreenCaptureIntent();
-        startActivityForResult(permissionIntent, SCREEN_RECORD_REQUEST_CODE);
     }
 
     /**
@@ -194,7 +123,7 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
      * 获取 PeerConnection 对象
      */
     private synchronized PeerConnection getOrCreatePeerConnection(String socketId) {
-        PeerConnection peerConnection = SignalingClient.peerConnectionMap.get(socketId);
+        PeerConnection peerConnection = peerConnectionMap.get(socketId);
         if(peerConnection != null) {
             return peerConnection;
         }
@@ -209,11 +138,11 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
                 super.onAddStream(mediaStream);
                 // 显示远端屏幕视频流
                 VideoTrack videoTrack = mediaStream.videoTracks.get(0);
-                Log.d("test", String.format("videoTrack：%s", videoTrack));
+                Log.d("TEST", "媒体资源渲染成功");
                 runOnUiThread(() -> videoTrack.addSink(mediaStreamView));
             }
         });
-        SignalingClient.peerConnectionMap.put(socketId, peerConnection);
+        peerConnectionMap.put(socketId, peerConnection);
         return peerConnection;
     }
 
@@ -224,6 +153,7 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
                 super.onCreateSuccess(sessionDescription);
+                Log.d(TAG, "Create Offer SDP success: " + sessionDescription.description);
                 peerConnection.setLocalDescription(new SdpAdapter("setLocalSdp:" + socketId), sessionDescription);
                 SignalingClient.getInstance().sendSessionDescription(sessionDescription, socketId);
             }
@@ -241,7 +171,7 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
                 @Override
                 public void onCreateSuccess(SessionDescription sdp) {
                     super.onCreateSuccess(sdp);
-                    SignalingClient.peerConnectionMap.get(socketId).setLocalDescription(new SdpAdapter("setLocalSdp:" + socketId), sdp);
+                    peerConnectionMap.get(socketId).setLocalDescription(new SdpAdapter("setLocalSdp:" + socketId), sdp);
                     SignalingClient.getInstance().sendSessionDescription(sdp, socketId);
                 }
             }, new MediaConstraints());
@@ -265,12 +195,6 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
                 data.optInt("label"),
                 data.optString("candidate")
         ));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SignalingClient.getInstance().destroy();
     }
 
 }

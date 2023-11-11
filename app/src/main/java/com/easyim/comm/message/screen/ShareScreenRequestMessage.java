@@ -10,13 +10,6 @@ import com.easyim.comm.message.MessageTypeConstants;
  */
 public class ShareScreenRequestMessage extends Message {
 
-    public ShareScreenRequestMessage() {
-    }
-
-    public ShareScreenRequestMessage(long messageId) {
-        super.setMessageId(messageId);
-    }
-
     @Override
     public Byte getConstant() {
         return MessageTypeConstants.ShareScreenRequestMessage;

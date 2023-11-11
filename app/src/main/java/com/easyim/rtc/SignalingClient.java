@@ -5,13 +5,10 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.IceCandidate;
-import org.webrtc.PeerConnection;
 import org.webrtc.SessionDescription;
 
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -42,11 +39,6 @@ public class SignalingClient {
      * 客户端套接字（用于通信）
      */
     private Socket socket;
-
-    /**
-     * 连接集合
-     */
-    public static final Map<String, PeerConnection> peerConnectionMap = new ConcurrentHashMap<>();
 
     /**
      * 采用双重锁检查方式获取单例
@@ -89,7 +81,7 @@ public class SignalingClient {
                 callback.onPeerJoined(String.valueOf(args[1]));
             });
             socket.on("joined", args -> {
-                Log.d(TAG, String.format("客户端加入成功 【socketID: %s】", socket.id()));
+                Log.d(TAG, String.format("客户端加入成功 【socketID: %s】", Arrays.toString(args)));
             });
             socket.on("log", args -> {
                 Log.d(TAG, String.format("日志回调 【log: %s】", Arrays.toString(args)));

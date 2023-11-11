@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">easy-im</string>
+    <string name="app_name">EasyIM</string>
     <string name="empty_string"/>
     <string name="meetingId">会议号</string>
     <string name="nickname">入会昵称</string>
@@ -13,4 +13,5 @@
     <string name="input_message">输入消息</string>
     <string name="send">发送</string>
     <string name="end_share">结束共享</string>
+    <string name="launch_screen">屏幕录制中</string>
 </resources>
