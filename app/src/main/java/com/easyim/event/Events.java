@@ -27,4 +27,7 @@ public class Events {
     // 退出会议响应事件
     public static final String LEAVE_RESPONSE = "leave_response";
 
+    // 退出屏幕共享响应事件
+    public static final String EXIT_RESPONSE = "exit_response";
+
 }

@@ -27,5 +27,7 @@ public interface MessageTypeConstants {
     Byte ShareScreenResponseMessage = 15;
     Byte LeaveMeetingRequestMessage = 16;
     Byte LeaveMeetingResponseMessage = 17;
+    Byte ExitScreenRequestMessage = 18;
+    Byte ExitScreenResponseMessage = 19;
 
 }

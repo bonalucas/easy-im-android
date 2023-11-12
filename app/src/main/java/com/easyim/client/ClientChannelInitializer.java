@@ -5,6 +5,7 @@ import com.easyim.client.handler.HandShakeHandler;
 import com.easyim.client.handler.HeartBeatHandler;
 import com.easyim.client.handler.biz.ChatHandler;
 import com.easyim.client.handler.biz.CreateMeetingHandler;
+import com.easyim.client.handler.biz.ExitScreenHandler;
 import com.easyim.client.handler.biz.FileHandler;
 import com.easyim.client.handler.biz.JoinMeetingHandler;
 import com.easyim.client.handler.biz.LeaveMeetingHandler;
@@ -44,6 +45,7 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
         socketChannel.pipeline().addLast(FileHandler.class.getSimpleName(), FileHandler.getInstance());
         socketChannel.pipeline().addLast(ShareScreenHandler.class.getSimpleName(), ShareScreenHandler.getInstance());
         socketChannel.pipeline().addLast(LeaveMeetingHandler.class.getSimpleName(), LeaveMeetingHandler.getInstance());
+        socketChannel.pipeline().addLast(ExitScreenHandler.class.getSimpleName(), ExitScreenHandler.getInstance());
         // 添加监控处理器
         socketChannel.pipeline().addLast(ExceptionHandler.class.getSimpleName(), ExceptionHandler.getInstance());
     }

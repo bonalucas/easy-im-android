@@ -18,6 +18,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.easyim.R;
+import com.easyim.comm.message.screen.ExitScreenRequestMessage;
+import com.easyim.service.MessageProcessor;
 
 /**
  * 发起屏幕共享活动
@@ -75,6 +77,8 @@ public class ScreenSharingActivity extends AppCompatActivity {
                 // 广播通知前台服务关闭并停止音视频流
                 Intent intent = new Intent(ScreenRecordingService.ACTION_STOP_STREAM);
                 sendBroadcast(intent);
+                // 通知会议其他人退出会议
+                MessageProcessor.getInstance().sendMessage(new ExitScreenRequestMessage());
                 // 结束页面返回会议页面
                 finish();
             }

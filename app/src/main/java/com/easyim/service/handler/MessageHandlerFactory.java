@@ -4,6 +4,7 @@ import com.easyim.comm.message.MessageTypeConstants;
 import com.easyim.service.handler.impl.ChatServiceHandler;
 import com.easyim.service.handler.impl.CreateMeetingServiceHandler;
 import com.easyim.service.handler.impl.ErrorMessageServiceHandler;
+import com.easyim.service.handler.impl.ExitScreenServiceHandler;
 import com.easyim.service.handler.impl.FileServiceHandler;
 import com.easyim.service.handler.impl.JoinMeetingServiceHandler;
 import com.easyim.service.handler.impl.LeaveMeetingServiceHandler;
@@ -29,6 +30,7 @@ public class MessageHandlerFactory {
         handlerMap.put(MessageTypeConstants.FileResponseMessage, new FileServiceHandler());
         handlerMap.put(MessageTypeConstants.ShareScreenResponseMessage, new ShareScreenServiceHandler());
         handlerMap.put(MessageTypeConstants.LeaveMeetingResponseMessage, new LeaveMeetingServiceHandler());
+        handlerMap.put(MessageTypeConstants.ExitScreenResponseMessage, new ExitScreenServiceHandler());
     }
 
     /**

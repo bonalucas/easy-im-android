@@ -6,13 +6,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.easyim.R;
+import com.easyim.comm.message.screen.ExitScreenResponseMessage;
+import com.easyim.event.CEventCenter;
+import com.easyim.event.Events;
+import com.easyim.event.I_CEventListener;
 import com.easyim.rtc.PeerConnectionAdapter;
 import com.easyim.rtc.SdpAdapter;
 import com.easyim.rtc.SignalingClient;
+import com.easyim.service.ServiceThreadPoolExecutor;
 
 import org.json.JSONObject;
 import org.webrtc.DefaultVideoDecoderFactory;
@@ -37,7 +43,7 @@ import java.util.Map;
  *
  * @author 单程车票
  */
-public class ScreenShareActivity extends AppCompatActivity implements SignalingClient.Callback {
+public class ScreenShareActivity extends AppCompatActivity implements SignalingClient.Callback, I_CEventListener {
 
     /**
      * 日志标识
@@ -69,6 +75,11 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
      */
     private final Map<String, PeerConnection> peerConnectionMap = new HashMap<>();
 
+    /**
+     * 监听事件
+     */
+    private final String[] interest = { Events.EXIT_RESPONSE };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +99,8 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
         String meetingId = intent.getStringExtra("meetingId");
         String theme = intent.getStringExtra("theme");
         meetingTheme.setText(theme);
-
+        // 注册监听事件
+        CEventCenter.onBindEvent(true, this, interest);
         // 连接信令服务器
         SignalingClient.getInstance().init(this, meetingId);
 
@@ -195,6 +207,23 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
                 data.optInt("label"),
                 data.optString("candidate")
         ));
+    }
+
+    @Override
+    public void onCEvent(String topic, int msgCode, int resultCode, Object obj) {
+        if (Events.EXIT_RESPONSE.equals(topic)) {
+            if (obj instanceof ExitScreenResponseMessage) {
+                ExitScreenResponseMessage msg = (ExitScreenResponseMessage) obj;
+                ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(ScreenShareActivity.this, msg.getNickname() + " 结束屏幕共享", Toast.LENGTH_SHORT).show());
+                // 注销监听事件
+                CEventCenter.onBindEvent(false, this, interest);
+                Log.d(TAG, "退出屏幕共享并断开信令服务器连接");
+                // 断开信令服务器连接
+                SignalingClient.getInstance().destroy();
+                // 结束页面返回会议页面
+                finish();
+            }
+        }
     }
 
 }
