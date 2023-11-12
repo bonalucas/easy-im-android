@@ -413,16 +413,6 @@ public class NettyClient {
     }
 
     /**
-     * 获取网络可用反馈
-     *
-     * @return 反馈结果
-     */
-    private boolean isNetworkAvailable() {
-        // TODO 处理网络反馈
-        return true;
-    }
-
-    /**
      * 连接服务器
      */
     private void toServer() {
@@ -468,14 +458,6 @@ public class NettyClient {
                 // 重连时停止心跳任务
                 clientExecutorService.destroyHeartbeatPool();
                 while (!isClosed) {
-                    if(!isNetworkAvailable()) {
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        continue;
-                    }
                     // 连接服务器获取连接状态标识
                     int status = reconnectTask();
                     // 连接成功
@@ -529,7 +511,7 @@ public class NettyClient {
             }
             // 循环尝试重连服务器
             for (int i = 1; i <= ClientConfig.DEFAULT_RECONNECT_COUNT; i++) {
-                if (isClosed || !isNetworkAvailable()) {
+                if (isClosed) {
                     return ClientConfig.CONNECT_STATE_FAILURE;
                 }
                 if (connectStatus != ClientConfig.CONNECT_STATE_CONNECTING) {

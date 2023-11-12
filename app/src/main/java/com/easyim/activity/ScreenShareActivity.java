@@ -107,13 +107,27 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
         endShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "退出屏幕共享并断开信令服务器连接");
-                // 断开信令服务器连接
-                SignalingClient.getInstance().destroy();
-                // 结束页面返回会议页面
-                finish();
+                shutdown();
             }
         });
+    }
+
+    /**
+     * 退出屏幕共享
+     */
+    private void shutdown() {
+        Log.d(TAG, "退出屏幕共享并断开信令服务器连接");
+        // 注销监听事件
+        CEventCenter.onBindEvent(false, this, interest);
+        // 断开信令服务器连接
+        SignalingClient.getInstance().destroy();
+        // 释放 SurfaceViewRenderer 资源
+        if (mediaStreamView != null) {
+            mediaStreamView.release();
+            mediaStreamView = null;
+        }
+        // 结束页面返回会议页面
+        finish();
     }
 
     /**
@@ -150,7 +164,6 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
                 super.onAddStream(mediaStream);
                 // 显示远端屏幕视频流
                 VideoTrack videoTrack = mediaStream.videoTracks.get(0);
-                Log.d("TEST", "媒体资源渲染成功");
                 runOnUiThread(() -> videoTrack.addSink(mediaStreamView));
             }
         });
@@ -215,13 +228,7 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
             if (obj instanceof ExitScreenResponseMessage) {
                 ExitScreenResponseMessage msg = (ExitScreenResponseMessage) obj;
                 ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(ScreenShareActivity.this, msg.getNickname() + " 结束屏幕共享", Toast.LENGTH_SHORT).show());
-                // 注销监听事件
-                CEventCenter.onBindEvent(false, this, interest);
-                Log.d(TAG, "退出屏幕共享并断开信令服务器连接");
-                // 断开信令服务器连接
-                SignalingClient.getInstance().destroy();
-                // 结束页面返回会议页面
-                finish();
+                shutdown();
             }
         }
     }

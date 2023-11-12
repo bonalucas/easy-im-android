@@ -35,7 +35,7 @@ public class ClientConfig {
     /**
      * 心跳消息间隔时长（前台）
      */
-    public static final int DEFAULT_HEARTBEAT_INTERVAL_FOREGROUND = 8 * 1000;
+    public static final int DEFAULT_HEARTBEAT_INTERVAL_FOREGROUND = 15 * 1000;
 
     /**
      * 心跳消息间隔时长（后台）

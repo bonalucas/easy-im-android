@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
         setContentView(R.layout.activity_main);
         // 初始化 Netty 客户端
         NettyClient nettyClient = NettyClient.getInstance();
-        nettyClient.init(ClientConfig.APP_STATUS_BACKGROUND);
+        nettyClient.init(ClientConfig.APP_STATUS_FOREGROUND);
         // 注册监听事件
         CEventCenter.onBindEvent(true, this, interest);
         // 获取界面元素的引用
@@ -210,4 +210,19 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 break;
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 应用切换到前台时执行的操作
+        NettyClient.getInstance().setAppStatus(ClientConfig.APP_STATUS_FOREGROUND);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 应用切换到后台时执行的操作
+        NettyClient.getInstance().setAppStatus(ClientConfig.APP_STATUS_BACKGROUND);
+    }
+
 }
