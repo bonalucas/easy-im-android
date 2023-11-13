@@ -43,6 +43,7 @@ import com.easyim.comm.message.meeting.LeaveMeetingResponseMessage;
 import com.easyim.comm.message.screen.ExitScreenRequestMessage;
 import com.easyim.comm.message.screen.ShareScreenResponseMessage;
 import com.easyim.common.Constants;
+import com.easyim.common.FastUniqueIDGenerator;
 import com.easyim.event.CEventCenter;
 import com.easyim.event.Events;
 import com.easyim.event.I_CEventListener;
@@ -207,8 +208,20 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
                         byte[] file = readBytesFromUri(selectedFileUri);
                         String fileName = getFileNameFromUri(selectedFileUri);
                         String mimeType = getFileMimeType(selectedFileUri);
-                        FileRequestMessage message = new FileRequestMessage(fileName, mimeType, file);
-                        MessageProcessor.getInstance().sendMessage(message);
+                        // 分块传输文件
+                        String fileId = FastUniqueIDGenerator.generateID();
+                        int chunkSize = 1024 * 1024; // 每次传输大小为 1 MB
+                        int remaining = file.length % chunkSize;
+                        int chunkCount = file.length / chunkSize + (remaining > 0 ? 1 : 0);
+                        int offset = 0;
+                        for (int i = 0; i < chunkCount; i++) {
+                            int len = (i == chunkCount - 1 && remaining > 0) ? remaining : chunkSize;
+                            byte[] chunkFile = new byte[len];
+                            System.arraycopy(file, offset, chunkFile, 0, len);
+                            offset += len;
+                            FileRequestMessage message = new FileRequestMessage(fileId, fileName, mimeType, chunkFile, i, chunkCount);
+                            MessageProcessor.getInstance().sendMessage(message);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
