@@ -179,6 +179,10 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        // 存在屏幕共享则先关闭屏幕共享
+        if (isShareScreen) {
+            closeScreenShare();
+        }
         // 返回逻辑处理
         exitMeeting();
     }
@@ -210,7 +214,7 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
                         String mimeType = getFileMimeType(selectedFileUri);
                         // 分块传输文件
                         String fileId = FastUniqueIDGenerator.generateID();
-                        int chunkSize = 1024 * 1024; // 每次传输大小为 1 MB
+                        int chunkSize = 1024 * 1024 * 5; // 每次传输大小为 1 MB
                         int remaining = file.length % chunkSize;
                         int chunkCount = file.length / chunkSize + (remaining > 0 ? 1 : 0);
                         int offset = 0;
@@ -388,10 +392,14 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
     private void sendMessage() {
         EditText editTextChat = findViewById(R.id.editTextChat);
         String message = editTextChat.getText().toString().trim();
-        ChatRequestMessage requestMessage = new ChatRequestMessage(SnowflakeIDGenerator.generateID(), Constants.ChatMessageType.TEXT_TYPE, message);
-        MessageProcessor.getInstance().sendMessage(requestMessage);
-        if (!message.isEmpty()) {
-            editTextChat.setText("");
+        if ("".equals(message)) {
+            Toast.makeText(MeetingActivity.this, "发送内容不能为空", Toast.LENGTH_SHORT).show();
+        } else {
+            ChatRequestMessage requestMessage = new ChatRequestMessage(SnowflakeIDGenerator.generateID(), Constants.ChatMessageType.TEXT_TYPE, message);
+            MessageProcessor.getInstance().sendMessage(requestMessage);
+            if (!message.isEmpty()) {
+                editTextChat.setText("");
+            }
         }
     }
 

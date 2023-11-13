@@ -124,12 +124,15 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 String meetingTitle = editTextMeetingTitle.getText().toString();
                 String nickName = editTextNickName.getText().toString();
 
-                CreateMeetingRequestMessage message = new CreateMeetingRequestMessage(SnowflakeIDGenerator.generateID(),
-                        generatedMeetingNumber, meetingTitle, nickName);
-                MessageProcessor.getInstance().sendMessage(message);
-
-                // 关闭弹窗
-                dialog.dismiss();
+                if ("".equals(meetingTitle) || "".equals(nickName)) {
+                    Toast.makeText(MainActivity.this, "会议主题或入会昵称不能为空", Toast.LENGTH_SHORT).show();
+                } else {
+                    CreateMeetingRequestMessage message = new CreateMeetingRequestMessage(SnowflakeIDGenerator.generateID(),
+                            generatedMeetingNumber, meetingTitle, nickName);
+                    MessageProcessor.getInstance().sendMessage(message);
+                    // 关闭弹窗
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -152,11 +155,15 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
                 String meetingNumber = editTextMeetingNumber.getText().toString();
                 String nickName = editTextNickName.getText().toString();
 
-                JoinMeetingRequestMessage message = new JoinMeetingRequestMessage(SnowflakeIDGenerator.generateID(), meetingNumber, nickName);
-                MessageProcessor.getInstance().sendMessage(message);
+                if ("".equals(meetingNumber) || "".equals(nickName)) {
+                    Toast.makeText(MainActivity.this, "会议号或入会昵称不能为空", Toast.LENGTH_SHORT).show();
+                } else {
+                    JoinMeetingRequestMessage message = new JoinMeetingRequestMessage(SnowflakeIDGenerator.generateID(), meetingNumber, nickName);
+                    MessageProcessor.getInstance().sendMessage(message);
+                    // 关闭弹窗
+                    dialog.dismiss();
+                }
 
-                // 关闭弹窗
-                dialog.dismiss();
             }
         });
 
