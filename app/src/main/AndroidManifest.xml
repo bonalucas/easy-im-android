@@ -36,10 +36,6 @@
             android:label="@string/empty_string"
             android:theme="@style/Theme.Easyimclient">
         </activity>
-        <activity android:name=".activity.ScreenSharingActivity"
-            android:label="@string/empty_string"
-            android:theme="@style/Theme.Easyimclient">
-        </activity>
         <service android:name=".activity.ScreenRecordingService"
             android:foregroundServiceType="mediaProjection"
             android:exported="false" />

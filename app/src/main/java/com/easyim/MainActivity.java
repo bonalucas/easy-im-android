@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements I_CEventListener 
     /**
      * 退出会议标识
      */
-    private static final int LEAVE_MEETING_CODE = 606;
+    private static final int LEAVE_MEETING_CODE = 1000;
 
     /**
      * 监听事件

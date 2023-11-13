@@ -5,50 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".activity.ScreenShareActivity">
 
-    <!-- 顶部栏 -->
-    <LinearLayout
-        android:id="@+id/topBar"
+    <org.webrtc.SurfaceViewRenderer
+        android:id="@+id/mediaStreamView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <!-- 结束共享按钮 -->
-        <ImageButton
-            android:id="@+id/endShareButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/end_share"
-            android:minHeight="48dp"
-            android:src="@drawable/ic_return" />
-
-        <!-- 会议主题文本 -->
-        <TextView
-            android:id="@+id/meetingTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/theme"
-            android:textColor="#fff"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <!-- 屏幕共享画面 -->
-    <FrameLayout
-        android:id="@+id/screenShareView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/topBar">
-
-        <org.webrtc.SurfaceViewRenderer
-            android:id="@+id/mediaStreamView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

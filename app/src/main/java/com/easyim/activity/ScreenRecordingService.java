@@ -180,8 +180,7 @@ public class ScreenRecordingService extends Service implements SignalingClient.C
                 SignalingClient.getInstance().sendIceCandidate(iceCandidate, socketId);
             }
         });
-        assert peerConnection != null;
-        peerConnection.addStream(mediaStream);
+        if (peerConnection != null) peerConnection.addStream(mediaStream);
         peerConnectionMap.put(socketId, peerConnection);
         return peerConnection;
     }

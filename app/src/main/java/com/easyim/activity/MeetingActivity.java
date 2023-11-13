@@ -1,9 +1,12 @@
 package com.easyim.activity;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -17,9 +20,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +40,7 @@ import com.easyim.comm.message.file.FileResponseMessage;
 import com.easyim.comm.message.meeting.JoinMeetingResponseMessage;
 import com.easyim.comm.message.meeting.LeaveMeetingRequestMessage;
 import com.easyim.comm.message.meeting.LeaveMeetingResponseMessage;
+import com.easyim.comm.message.screen.ExitScreenRequestMessage;
 import com.easyim.comm.message.screen.ShareScreenResponseMessage;
 import com.easyim.common.Constants;
 import com.easyim.event.CEventCenter;
@@ -58,9 +65,24 @@ import java.util.List;
 public class MeetingActivity extends AppCompatActivity implements I_CEventListener {
 
     /**
+     * 屏幕共享标识
+     */
+    private boolean isShareScreen = false;
+
+    /**
      * 文件请求码
      */
-    private static final int FILE_PICKER_REQUEST_CODE = 679;
+    private static final int FILE_PICKER_REQUEST_CODE = 1001;
+
+    /**
+     * 麦克风权限请求码
+     */
+    private static final int RECORD_AUDIO_REQUEST_CODE = 1002;
+
+    /**
+     * 屏幕录制权限请求码
+     */
+    private static final int SCREEN_RECORD_REQUEST_CODE = 1003;
 
     /**
      * 聊天记录消息列表
@@ -71,6 +93,11 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
      * 聊天适配器
      */
     private ChatAdapter chatAdapter;
+
+    /**
+     * 会议号
+     */
+    private String meetingId;
 
     /**
      * 监听事件
@@ -85,7 +112,6 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         CEventCenter.registerEventListener(this, interest);
         // 获取界面元素的引用
         TextView meetingTheme = findViewById(R.id.textViewMeetingTitle);
-        ImageButton buttonExitMeeting = findViewById(R.id.buttonExitMeeting);
         ImageButton buttonUploadFile = findViewById(R.id.buttonUploadFile);
         ImageButton buttonScreen = findViewById(R.id.buttonScreen);
         Button buttonSend = findViewById(R.id.buttonSend);
@@ -98,7 +124,7 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         Intent intent = getIntent();
         String nickname = intent.getStringExtra("nickname");
         String theme = intent.getStringExtra("theme");
-        String meetingId = intent.getStringExtra("meetingId");
+        meetingId = intent.getStringExtra("meetingId");
         String type = intent.getStringExtra("type");
         meetingTheme.setText(theme);
         if ("create".equals(type)) {
@@ -113,15 +139,6 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
             chatAdapter.notifyItemInserted(chatMessages.size() - 1);
         }
 
-        // 按钮事件响应
-        buttonExitMeeting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 退出会议
-                exitMeeting();
-            }
-        });
-
         buttonUploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,8 +150,18 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         buttonScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 处理发起屏幕共享逻辑
-                jumpScreenSharing(theme, meetingId);
+                if (isShareScreen) {
+                    // 关闭屏幕共享
+                    closeScreenShare();
+                    isShareScreen = false;
+                    buttonScreen.setImageResource(R.drawable.ic_screen);
+                } else {
+                    // 发起屏幕共享
+                    startScreenSharing();
+                    isShareScreen = true;
+                    buttonScreen.setImageResource(R.drawable.ic_close);
+                }
+
             }
         });
 
@@ -148,62 +175,30 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
 
     }
 
-    /**
-     * 跳转到屏幕共享发起页面
-     */
-    private void jumpScreenSharing(String theme, String meetingId) {
-        // 跳转到发起屏幕共享页面
-        Intent intent = new Intent(MeetingActivity.this, ScreenSharingActivity.class);
-        intent.putExtra("theme", theme);
-        intent.putExtra("meetingId", meetingId);
-        startActivity(intent);
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // 返回逻辑处理
+        exitMeeting();
     }
 
-    /**
-     * 退出会议
-     */
-    private void exitMeeting() {
-        // 通知会议其他人并退出会议
-        MessageProcessor.getInstance().sendMessage(new LeaveMeetingRequestMessage());
-        // 结束当前页面
-        setResult(RESULT_OK, new Intent());
-        finish();
-    }
-
-    /**
-     * 打开文件选择器
-     */
-    private void openFilePicker() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        try {
-            startActivityForResult(
-                    Intent.createChooser(intent, "选择文件"),
-                    FILE_PICKER_REQUEST_CODE
-            );
-        } catch (android.content.ActivityNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * 发送文本消息
-     */
-    private void sendMessage() {
-        EditText editTextChat = findViewById(R.id.editTextChat);
-        String message = editTextChat.getText().toString().trim();
-        ChatRequestMessage requestMessage = new ChatRequestMessage(SnowflakeIDGenerator.generateID(), Constants.ChatMessageType.TEXT_TYPE, message);
-        MessageProcessor.getInstance().sendMessage(requestMessage);
-        if (!message.isEmpty()) {
-            editTextChat.setText("");
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == RECORD_AUDIO_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 获得麦克风权限后请求屏幕录制权限
+                requestScreenRecordPermission();
+            } else {
+                Toast.makeText(MeetingActivity.this, "用户拒绝开启麦克风，无法进行语音聊天", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        // 文件上传
         if (requestCode == FILE_PICKER_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
@@ -220,6 +215,18 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
                 }
             }
         }
+        // 屏幕录制
+        if (requestCode == SCREEN_RECORD_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Intent serviceIntent = new Intent(this, ScreenRecordingService.class);
+                serviceIntent.putExtra("data", data);
+                serviceIntent.putExtra("meetingId", meetingId);
+                startForegroundService(serviceIntent);
+            } else {
+                Toast.makeText(MeetingActivity.this, "用户拒绝开启屏幕录制，无法进行屏幕共享", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
     @Override
@@ -306,6 +313,82 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
             default:
                 break;
         }
+    }
+
+    /**
+     * 发起屏幕共享
+     */
+    private void startScreenSharing() {
+        // 获取麦克风权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            // 请求麦克风权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
+        } else {
+            // 直接请求屏幕录制权限
+            requestScreenRecordPermission();
+        }
+    }
+
+    /**
+     * 关闭屏幕共享
+     */
+    private void closeScreenShare() {
+        // 广播通知前台服务关闭并停止音视频流
+        Intent intent = new Intent(ScreenRecordingService.ACTION_STOP_STREAM);
+        sendBroadcast(intent);
+        // 通知会议其他人退出会议
+        MessageProcessor.getInstance().sendMessage(new ExitScreenRequestMessage());
+    }
+
+    /**
+     * 退出会议
+     */
+    private void exitMeeting() {
+        // 通知会议其他人并退出会议
+        MessageProcessor.getInstance().sendMessage(new LeaveMeetingRequestMessage());
+        // 结束当前页面
+        setResult(RESULT_OK, new Intent());
+        finish();
+    }
+
+    /**
+     * 打开文件选择器
+     */
+    private void openFilePicker() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, "选择文件"),
+                    FILE_PICKER_REQUEST_CODE
+            );
+        } catch (android.content.ActivityNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * 发送文本消息
+     */
+    private void sendMessage() {
+        EditText editTextChat = findViewById(R.id.editTextChat);
+        String message = editTextChat.getText().toString().trim();
+        ChatRequestMessage requestMessage = new ChatRequestMessage(SnowflakeIDGenerator.generateID(), Constants.ChatMessageType.TEXT_TYPE, message);
+        MessageProcessor.getInstance().sendMessage(requestMessage);
+        if (!message.isEmpty()) {
+            editTextChat.setText("");
+        }
+    }
+
+    /**
+     * 请求屏幕录制权限
+     */
+    private void requestScreenRecordPermission() {
+        MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        Intent permissionIntent = projectionManager.createScreenCaptureIntent();
+        startActivityForResult(permissionIntent, SCREEN_RECORD_REQUEST_CODE);
     }
 
     /**

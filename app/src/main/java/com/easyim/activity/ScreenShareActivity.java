@@ -2,10 +2,6 @@ package com.easyim.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,11 +42,6 @@ import java.util.Map;
 public class ScreenShareActivity extends AppCompatActivity implements SignalingClient.Callback, I_CEventListener {
 
     /**
-     * 日志标识
-     */
-    private static final String TAG = ScreenShareActivity.class.getSimpleName();
-
-    /**
      * 连接工厂
      */
     private PeerConnectionFactory peerConnectionFactory;
@@ -89,34 +80,40 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
         iceServers.add(PeerConnection.IceServer.builder("stun:stun.l.google.com:19302").createIceServer());
         initWebRTC();
         // 获取界面元素
-        ImageButton endShareButton = findViewById(R.id.endShareButton);
-        TextView meetingTheme = findViewById(R.id.meetingTitle);
         mediaStreamView = findViewById(R.id.mediaStreamView);
         mediaStreamView.setMirror(false);
         mediaStreamView.init(eglBaseContext, null);
         // 初始化屏幕共享页面
         Intent intent = getIntent();
         String meetingId = intent.getStringExtra("meetingId");
-        String theme = intent.getStringExtra("theme");
-        meetingTheme.setText(theme);
         // 注册监听事件
         CEventCenter.onBindEvent(true, this, interest);
         // 连接信令服务器
         SignalingClient.getInstance().init(this, meetingId);
+    }
 
-        endShareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // 退出屏幕共享逻辑
+        shutdown();
+    }
+
+    @Override
+    public void onCEvent(String topic, int msgCode, int resultCode, Object obj) {
+        if (Events.EXIT_RESPONSE.equals(topic)) {
+            if (obj instanceof ExitScreenResponseMessage) {
+                ExitScreenResponseMessage msg = (ExitScreenResponseMessage) obj;
+                ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(ScreenShareActivity.this, msg.getNickname() + " 结束屏幕共享", Toast.LENGTH_SHORT).show());
                 shutdown();
             }
-        });
+        }
     }
 
     /**
      * 退出屏幕共享
      */
     private void shutdown() {
-        Log.d(TAG, "退出屏幕共享并断开信令服务器连接");
         // 注销监听事件
         CEventCenter.onBindEvent(false, this, interest);
         // 断开信令服务器连接
@@ -178,7 +175,6 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
                 super.onCreateSuccess(sessionDescription);
-                Log.d(TAG, "Create Offer SDP success: " + sessionDescription.description);
                 peerConnection.setLocalDescription(new SdpAdapter("setLocalSdp:" + socketId), sessionDescription);
                 SignalingClient.getInstance().sendSessionDescription(sessionDescription, socketId);
             }
@@ -220,17 +216,6 @@ public class ScreenShareActivity extends AppCompatActivity implements SignalingC
                 data.optInt("label"),
                 data.optString("candidate")
         ));
-    }
-
-    @Override
-    public void onCEvent(String topic, int msgCode, int resultCode, Object obj) {
-        if (Events.EXIT_RESPONSE.equals(topic)) {
-            if (obj instanceof ExitScreenResponseMessage) {
-                ExitScreenResponseMessage msg = (ExitScreenResponseMessage) obj;
-                ServiceThreadPoolExecutor.runOnMainThread(() -> Toast.makeText(ScreenShareActivity.this, msg.getNickname() + " 结束屏幕共享", Toast.LENGTH_SHORT).show());
-                shutdown();
-            }
-        }
     }
 
 }
