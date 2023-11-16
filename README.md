@@ -98,6 +98,13 @@ public class SignalingClient {
                 └─impl
 ```
 
+## Example
+
+![创建加入会议.png](pic/创建加入会议.png "创建加入会议.png")
+![文字聊天及文件共享.png](pic/文字聊天及文件共享.png "文字聊天及文件共享.png")
+![屏幕共享及语音共享.png](pic/屏幕共享及语音共享.png "屏幕共享及语音共享.png")
+![退出会议.png](pic/退出会议.png "退出会议.png")
+
 ## License
 
 Apache-2.0 license
