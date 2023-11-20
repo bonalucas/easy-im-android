@@ -71,6 +71,11 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
     private boolean isShareScreen = false;
 
     /**
+     * 屏幕共享按钮
+     */
+    private ImageButton buttonScreen;
+
+    /**
      * 文件请求码
      */
     private static final int FILE_PICKER_REQUEST_CODE = 1001;
@@ -114,7 +119,7 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         // 获取界面元素的引用
         TextView meetingTheme = findViewById(R.id.textViewMeetingTitle);
         ImageButton buttonUploadFile = findViewById(R.id.buttonUploadFile);
-        ImageButton buttonScreen = findViewById(R.id.buttonScreen);
+        buttonScreen = findViewById(R.id.buttonScreen);
         Button buttonSend = findViewById(R.id.buttonSend);
         // 初始化适配器
         RecyclerView recyclerViewChat = findViewById(R.id.recyclerViewChat);
@@ -154,13 +159,9 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
                 if (isShareScreen) {
                     // 关闭屏幕共享
                     closeScreenShare();
-                    isShareScreen = false;
-                    buttonScreen.setImageResource(R.drawable.ic_screen);
                 } else {
                     // 发起屏幕共享
                     startScreenSharing();
-                    isShareScreen = true;
-                    buttonScreen.setImageResource(R.drawable.ic_close);
                 }
 
             }
@@ -195,6 +196,7 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
                 // 获得麦克风权限后请求屏幕录制权限
                 requestScreenRecordPermission();
             } else {
+                isShareScreen = false;
                 Toast.makeText(MeetingActivity.this, "用户拒绝开启麦克风，无法进行语音聊天", Toast.LENGTH_SHORT).show();
             }
         }
@@ -235,11 +237,17 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         // 屏幕录制
         if (requestCode == SCREEN_RECORD_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                // 更新标识并提示用户
+                isShareScreen = true;
+                buttonScreen.setImageResource(R.drawable.ic_close);
+                Toast.makeText(MeetingActivity.this, "开启屏幕共享", Toast.LENGTH_SHORT).show();
+                // 启动前台服务进行屏幕共享
                 Intent serviceIntent = new Intent(this, ScreenRecordingService.class);
                 serviceIntent.putExtra("data", data);
                 serviceIntent.putExtra("meetingId", meetingId);
                 startForegroundService(serviceIntent);
             } else {
+                isShareScreen = false;
                 Toast.makeText(MeetingActivity.this, "用户拒绝开启屏幕录制，无法进行屏幕共享", Toast.LENGTH_SHORT).show();
             }
         }
@@ -356,6 +364,10 @@ public class MeetingActivity extends AppCompatActivity implements I_CEventListen
         sendBroadcast(intent);
         // 通知会议其他人退出会议
         MessageProcessor.getInstance().sendMessage(new ExitScreenRequestMessage());
+        // 更改标识并通知用户
+        isShareScreen = false;
+        buttonScreen.setImageResource(R.drawable.ic_screen);
+        Toast.makeText(MeetingActivity.this, "关闭屏幕共享", Toast.LENGTH_SHORT).show();
     }
 
     /**
